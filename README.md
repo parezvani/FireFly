@@ -1,6 +1,6 @@
 # ESP-32-Drone (SpectreFLY)
 
-SpectreFLY is a student-built drone platform centered on the `ESP32-C3-DevKit-RUST-1`, with swappable payload ideas (camera/LiDAR) and iterative frame + circuit prototyping.
+SpectreFLY is a student-built drone platform centered on the `ESP32-C3-DevKit-RUST-1`, ~~with swappable payload ideas (camera/LiDAR) and iterative frame + circuit prototyping~~.
 
 ## Repository Layout
 - `esp/`: firmware and embedded code (main implementation area).
