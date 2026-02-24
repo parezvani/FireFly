@@ -14,5 +14,3 @@ to help aid the response of a structured response to a potential fire for both t
 - **Mechanical/Design Team**
 
 - **Software Team**
-
-
