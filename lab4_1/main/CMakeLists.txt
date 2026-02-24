@@ -1,2 +1,2 @@
-idf_component_register(SRCS "i2c_basic_example_main.c"
+idf_component_register(SRCS "wificonnection.c"
                        INCLUDE_DIRS ".")
