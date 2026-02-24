@@ -1,93 +1,207 @@
-/*
- * SPDX-FileCopyrightText: 2024 Espressif Systems (Shanghai) CO LTD
- *
- * SPDX-License-Identifier: Unlicense OR CC0-1.0
- */
-/* i2c - Simple Example
 
-   Simple I2C example that shows how to initialize I2C
-   as well as reading and writing from and to registers for a sensor connected over I2C.
-
-   The sensor used in this example is a MPU9250 inertial measurement unit.
-*/
 #include <stdio.h>
-#include "sdkconfig.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+#include "driver/i2c.h"
+#include "esp_system.h"
 #include "esp_log.h"
-#include "driver/i2c_master.h"
 
-static const char *TAG = "example";
+#define I2C_MASTER_SCL_IO         8        /*!< GPIO number for I2C master clock */
+#define I2C_MASTER_SDA_IO         10       /*!< GPIO number for I2C master data  */
+#define I2C_MASTER_NUM            I2C_NUM_0
+#define I2C_MASTER_FREQ_HZ        100000
+#define I2C_MASTER_TX_BUF_DISABLE 0
+#define I2C_MASTER_RX_BUF_DISABLE 0
 
-#define I2C_MASTER_SCL_IO           CONFIG_I2C_MASTER_SCL       /*!< GPIO number used for I2C master clock */
-#define I2C_MASTER_SDA_IO           CONFIG_I2C_MASTER_SDA       /*!< GPIO number used for I2C master data  */
-#define I2C_MASTER_NUM              I2C_NUM_0                   /*!< I2C port number for master dev */
-#define I2C_MASTER_FREQ_HZ          CONFIG_I2C_MASTER_FREQUENCY /*!< I2C master clock frequency */
-#define I2C_MASTER_TX_BUF_DISABLE   0                           /*!< I2C master doesn't need buffer */
-#define I2C_MASTER_RX_BUF_DISABLE   0                           /*!< I2C master doesn't need buffer */
-#define I2C_MASTER_TIMEOUT_MS       1000
+#define SHTC3_SENSOR_ADDR   0x70
+#define SHTC3_CMD_SLEEP     0xB098
+#define SHTC3_CMD_WAKEUP    0x3517
 
-#define MPU9250_SENSOR_ADDR         0x68        /*!< Address of the MPU9250 sensor */
-#define MPU9250_WHO_AM_I_REG_ADDR   0x75        /*!< Register addresses of the "who am I" register */
-#define MPU9250_PWR_MGMT_1_REG_ADDR 0x6B        /*!< Register addresses of the power management register */
-#define MPU9250_RESET_BIT           7
+#define SHTC3_CMD_MEAS_T_FIRST   0x7CA2   /* Read temperature first */
+#define SHTC3_CMD_MEAS_RH_FIRST  0x5C24   /* Read humidity first   */
 
-/**
- * @brief Read a sequence of bytes from a MPU9250 sensor registers
- */
-static esp_err_t mpu9250_register_read(i2c_master_dev_handle_t dev_handle, uint8_t reg_addr, uint8_t *data, size_t len)
+static const char *TAG = "SHTC3_APP";
+
+static esp_err_t i2c_master_init(void)
 {
-    return i2c_master_transmit_receive(dev_handle, &reg_addr, 1, data, len, I2C_MASTER_TIMEOUT_MS / portTICK_PERIOD_MS);
-}
-
-/**
- * @brief Write a byte to a MPU9250 sensor register
- */
-static esp_err_t mpu9250_register_write_byte(i2c_master_dev_handle_t dev_handle, uint8_t reg_addr, uint8_t data)
-{
-    uint8_t write_buf[2] = {reg_addr, data};
-    return i2c_master_transmit(dev_handle, write_buf, sizeof(write_buf), I2C_MASTER_TIMEOUT_MS / portTICK_PERIOD_MS);
-}
-
-/**
- * @brief i2c master initialization
- */
-static void i2c_master_init(i2c_master_bus_handle_t *bus_handle, i2c_master_dev_handle_t *dev_handle)
-{
-    i2c_master_bus_config_t bus_config = {
-        .i2c_port = I2C_MASTER_NUM,
+    i2c_config_t cfg = {
+        .mode = I2C_MODE_MASTER,
         .sda_io_num = I2C_MASTER_SDA_IO,
         .scl_io_num = I2C_MASTER_SCL_IO,
-        .clk_source = I2C_CLK_SRC_DEFAULT,
-        .glitch_ignore_cnt = 7,
-        .flags.enable_internal_pullup = true,
+        .sda_pullup_en = GPIO_PULLUP_ENABLE,
+        .scl_pullup_en = GPIO_PULLUP_ENABLE,
+        .master.clk_speed = I2C_MASTER_FREQ_HZ,
     };
-    ESP_ERROR_CHECK(i2c_new_master_bus(&bus_config, bus_handle));
+    ESP_ERROR_CHECK(i2c_param_config(I2C_MASTER_NUM, &cfg));
+    return i2c_driver_install(I2C_MASTER_NUM, cfg.mode,
+                              I2C_MASTER_TX_BUF_DISABLE,
+                              I2C_MASTER_RX_BUF_DISABLE, 0);
+}
 
-    i2c_device_config_t dev_config = {
-        .dev_addr_length = I2C_ADDR_BIT_LEN_7,
-        .device_address = MPU9250_SENSOR_ADDR,
-        .scl_speed_hz = I2C_MASTER_FREQ_HZ,
-    };
-    ESP_ERROR_CHECK(i2c_master_bus_add_device(*bus_handle, &dev_config, dev_handle));
+static uint8_t shtc3_crc(uint8_t *data, size_t len)
+{
+    uint8_t crc = 0xFF;               /* initial value */
+    for (size_t i = 0; i < len; ++i) {
+        crc ^= data[i];
+        for (uint8_t b = 0; b < 8; ++b) {
+            crc = (crc & 0x80) ? (crc << 1) ^ 0x31 : (crc << 1);
+        }
+    }
+    return crc;
+}
+
+static esp_err_t shtc3_power_up(void)
+{
+    i2c_cmd_handle_t cmd = i2c_cmd_link_create();
+    i2c_master_start(cmd);
+    i2c_master_write_byte(cmd, (SHTC3_SENSOR_ADDR << 1) | I2C_MASTER_WRITE, true);
+    i2c_master_write_byte(cmd, SHTC3_CMD_WAKEUP >> 8, true);
+    i2c_master_write_byte(cmd, SHTC3_CMD_WAKEUP & 0xFF, true);
+    i2c_master_stop(cmd);
+
+    esp_err_t ret = i2c_master_cmd_begin(I2C_MASTER_NUM, cmd, pdMS_TO_TICKS(20));
+    i2c_cmd_link_delete(cmd);
+
+    /* Datasheet: max 240 µs until sensor is ready. We wait 1 ms for safety. */
+    vTaskDelay(pdMS_TO_TICKS(1));
+    return ret;
+}
+
+static esp_err_t shtc3_power_down(void)
+{
+    i2c_cmd_handle_t cmd = i2c_cmd_link_create();
+    i2c_master_start(cmd);
+    i2c_master_write_byte(cmd, (SHTC3_SENSOR_ADDR << 1) | I2C_MASTER_WRITE, true);
+    i2c_master_write_byte(cmd, SHTC3_CMD_SLEEP >> 8, true);
+    i2c_master_write_byte(cmd, SHTC3_CMD_SLEEP & 0xFF, true);
+    i2c_master_stop(cmd);
+
+    esp_err_t ret = i2c_master_cmd_begin(I2C_MASTER_NUM, cmd, pdMS_TO_TICKS(20));
+    i2c_cmd_link_delete(cmd);
+    return ret;
+}
+
+
+/* Convert raw 16‑bit values to physical units (datasheet formulas) */
+static inline float raw_to_celsius(uint16_t raw)
+{
+    return -45.0f + 175.0f * ((float)raw / 65535.0f);
+}
+static inline float raw_to_rh(uint16_t raw)
+{
+    return 100.0f * ((float)raw / 65535.0f);
+}
+
+
+//  * Each function reads *exactly three bytes* (2 bytes data + 1 byte CRC) as required.
+static esp_err_t shtc3_read_temperature(float *temp_c)
+{
+    uint8_t buf[3];
+    i2c_cmd_handle_t cmd = i2c_cmd_link_create();
+
+    /* Send measurement command (Temperature‑first) */
+    i2c_master_start(cmd);
+    i2c_master_write_byte(cmd, (SHTC3_SENSOR_ADDR << 1) | I2C_MASTER_WRITE, true);
+    i2c_master_write_byte(cmd, SHTC3_CMD_MEAS_T_FIRST >> 8, true);
+    i2c_master_write_byte(cmd, SHTC3_CMD_MEAS_T_FIRST & 0xFF, true);
+
+    /* Repeated start – read three bytes only */
+    i2c_master_start(cmd);
+    i2c_master_write_byte(cmd, (SHTC3_SENSOR_ADDR << 1) | I2C_MASTER_READ, true);
+    i2c_master_read(cmd, buf, sizeof(buf), I2C_MASTER_LAST_NACK);
+    i2c_master_stop(cmd);
+
+    esp_err_t ret = i2c_master_cmd_begin(I2C_MASTER_NUM, cmd, pdMS_TO_TICKS(20));
+    i2c_cmd_link_delete(cmd);
+    if (ret != ESP_OK) {
+        return ret;
+    }
+
+    /* CRC check */
+    if (shtc3_crc(buf, 2) != buf[2]) {
+        ESP_LOGE(TAG, "Temperature CRC mismatch");
+        return ESP_ERR_INVALID_CRC;
+    }
+
+    uint16_t raw = ((uint16_t)buf[0] << 8) | buf[1];
+    *temp_c = raw_to_celsius(raw);
+    return ESP_OK;
+}
+
+static esp_err_t shtc3_read_humidity(float *rh)
+{
+    uint8_t buf[3];
+    i2c_cmd_handle_t cmd = i2c_cmd_link_create();
+
+    /* Send measurement command (Humidity‑first) */
+    i2c_master_start(cmd);
+    i2c_master_write_byte(cmd, (SHTC3_SENSOR_ADDR << 1) | I2C_MASTER_WRITE, true);
+    i2c_master_write_byte(cmd, SHTC3_CMD_MEAS_RH_FIRST >> 8, true);
+    i2c_master_write_byte(cmd, SHTC3_CMD_MEAS_RH_FIRST & 0xFF, true);
+
+    /* Repeated start – read three bytes only */
+    i2c_master_start(cmd);
+    i2c_master_write_byte(cmd, (SHTC3_SENSOR_ADDR << 1) | I2C_MASTER_READ, true);
+    i2c_master_read(cmd, buf, sizeof(buf), I2C_MASTER_LAST_NACK);
+    i2c_master_stop(cmd);
+
+    esp_err_t ret = i2c_master_cmd_begin(I2C_MASTER_NUM, cmd, pdMS_TO_TICKS(20));
+    i2c_cmd_link_delete(cmd);
+    if (ret != ESP_OK) {
+        return ret;
+    }
+
+    /* CRC check */
+    if (shtc3_crc(buf, 2) != buf[2]) {
+        ESP_LOGE(TAG, "Humidity CRC mismatch");
+        return ESP_ERR_INVALID_CRC;
+    }
+
+    uint16_t raw = ((uint16_t)buf[0] << 8) | buf[1];
+    *rh = raw_to_rh(raw);
+    return ESP_OK;
+}
+
+
+ 
+static inline float celsius_to_fahrenheit(float c)
+{
+    return c * 1.8f + 32.0f;
 }
 
 void app_main(void)
 {
-    uint8_t data[2];
-    i2c_master_bus_handle_t bus_handle;
-    i2c_master_dev_handle_t dev_handle;
-    i2c_master_init(&bus_handle, &dev_handle);
-    ESP_LOGI(TAG, "I2C initialized successfully");
+    if (i2c_master_init() != ESP_OK) {
+        ESP_LOGE(TAG, "Failed to initialise I2C");
+        return;
+    }
 
-    /* Read the MPU9250 WHO_AM_I register, on power up the register should have the value 0x71 */
-    ESP_ERROR_CHECK(mpu9250_register_read(dev_handle, MPU9250_WHO_AM_I_REG_ADDR, data, 1));
-    ESP_LOGI(TAG, "WHO_AM_I = %X", data[0]);
+    /* Ensure power‑up is executed at most once every 2 s */
+    const TickType_t cycle_delay = pdMS_TO_TICKS(2000);
 
-    /* Demonstrate writing by resetting the MPU9250 */
-    ESP_ERROR_CHECK(mpu9250_register_write_byte(dev_handle, MPU9250_PWR_MGMT_1_REG_ADDR, 1 << MPU9250_RESET_BIT));
+    for (;;) {
+        /* Power‑up sensor */
+        if (shtc3_power_up() != ESP_OK) {
+            ESP_LOGE(TAG, "Sensor wake‑up failed");
+            vTaskDelay(cycle_delay);
+            continue;
+        }
 
-    ESP_ERROR_CHECK(i2c_master_bus_rm_device(dev_handle));
-    ESP_ERROR_CHECK(i2c_del_master_bus(bus_handle));
-    ESP_LOGI(TAG, "I2C de-initialized successfully");
+        float temp_c, rh;
+        esp_err_t t_ret = shtc3_read_temperature(&temp_c);
+        esp_err_t h_ret = shtc3_read_humidity(&rh);
+
+        /* Always put the sensor back to sleep regardless of read outcome */
+        shtc3_power_down();
+
+        if (t_ret == ESP_OK && h_ret == ESP_OK) {
+            float temp_f = celsius_to_fahrenheit(temp_c);
+            ESP_LOGI(TAG, "Temperature: %.2f °C (%.2f °F), Humidity: %.2f %%RH", temp_c, temp_f, rh);
+        } else {
+            ESP_LOGE(TAG, "Read error (T:%d, RH:%d)", t_ret, h_ret);
+        }
+
+        /* Wait ≥2 s before the next power‑up to respect the requirement */
+        vTaskDelay(cycle_delay);
+    }
 }
