@@ -10,13 +10,17 @@
 - **Christian**:
     - text
 - **Kenny**:
-    - Built a prototype to the prototype of the motor and motor controller
-    - Used an H-bridge found at BELS to link the esp and the motor together
-    - Made a simple code that would make the motor spin
+    - Built a prototype of the motor and motor controller
+    - Used an H-bridge found at BELS to link the ESP and the motor together
+    - Wrote simple code to make the motor spin
 - **Kevin**:
     - text
 - **Matin**:
-    - text
+    - Made the drone-design-5 CAD volume larger to accommodate all the electronics going inside.
+    - Placed all drone-design-5 files in its own subdirectory (for cleanliness).
+    - Fixed the GitHub README.md to reflect the new need/goal statement of our project.
+    - Cleaned up script_prototype.md.
+    - Cleaned up FEB_23_NOTES.md.
 - **Nick**:
     - text
 - **Parsa**:
@@ -26,7 +30,7 @@
 
 ## To-do, In-progress, Done:
 - **To-do**:
-    - Recieve the parts
+    - Receive the parts
 - **In-progress**:
     - Refining design documentation
 - **Done**:
