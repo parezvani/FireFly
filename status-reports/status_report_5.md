@@ -10,7 +10,9 @@
 - **Christian**:
     - text
 - **Kenny**:
-    - text
+    - Built a prototype to the prototype of the motor and motor controller
+    - Used an H-bridge found at BELS to link the esp and the motor together
+    - Made a simple code that would make the motor spin
 - **Kevin**:
     - text
 - **Matin**:
@@ -24,11 +26,12 @@
 
 ## To-do, In-progress, Done:
 - **To-do**:
-    - text
+    - Recieve the parts
 - **In-progress**:
-    - text
+    - Refining design documentation
 - **Done**:
-    - text
+    - Circuit schematic
+    - Needs and Goals finalized 
 
 ## ...
 - ...
