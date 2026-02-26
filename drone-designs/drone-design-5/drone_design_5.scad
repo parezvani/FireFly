@@ -13,15 +13,15 @@ show_esp32_header_pads = true;
 
 // Main frame geometry (mm)
 // v5 lightweight tuning: thinner shell while preserving electronics fit
-body_length = 96;
-body_width = 68;
+body_length = 100;
+body_width = 72;
 body_height = 24;
 body_corner_radius = 7;
 floor_thickness = 2.5;
 wall_thickness = 2.5;
 
 // Motor layout (extended for larger prop options)
-motor_center_offset = 64; // motor centers at (+/-x, +/-y)
+motor_center_offset = 66; // motor centers at (+/-x, +/-y)
 arm_width = 10.0;
 arm_thickness = 5.4;
 arm_root_inset_x = 10;
@@ -81,11 +81,11 @@ strap_slot_width = 24;
 
 // Side-wall lightening windows
 enable_side_lightening = true;
-side_window_height = 9.0;
+side_window_height = 12.0;
 side_window_z_offset = 0.0; // fine-tune vertical position while keeping windows centered
-long_side_window_length = 14.0;
+long_side_window_length = 16.0;
 long_side_window_x_offset = 18.0;
-short_side_window_length = 8.0;
+short_side_window_length = 10.0;
 short_side_window_y_offset = 12.0;
 side_window_corner_r = 2.0;
 
