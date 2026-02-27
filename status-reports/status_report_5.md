@@ -24,7 +24,11 @@
     - Cleaned up script_prototype.md.
     - Cleaned up FEB_23_NOTES.md.
 - **Nick**:
-    - text
+    - Worked on Design Document
+        - Reformatted to better fit requirements
+        - Added need and goal statements
+        - Added title page and executive summary
+    - Started research on connecting between esps
 - **Parsa**:
     - Set up SHTC3 sensor on the esp32-c3 to detect humidity and temp readings, should be able to convert that on to the new sensor thats coming.
     - Edited Design doc, added personas, Needs and Goal, and any existing reserach
