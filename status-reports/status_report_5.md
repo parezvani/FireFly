@@ -25,7 +25,9 @@
 - **Nick**:
     - text
 - **Parsa**:
-    - text
+    - Set up SHTC3 sensor on the esp32-c3 to detect humidity and temp readings, should be able to convert that on to the new sensor thats coming.
+    - Edited Design doc, added personas, Needs and Goal, and any existing reserach
+    - cleaned up the github build files
 - **Ryan**:
     - text
 
