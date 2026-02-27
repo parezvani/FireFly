@@ -14,7 +14,8 @@
     - Used an H-bridge found at BELS to link the ESP and the motor together
     - Wrote simple code to make the motor spin
 - **Kevin**:
-    - text
+    - Converted white board drawing of high level design to digital format to be easily edited
+    - Uploaded Feb_23_Notes.md covering focus on reworking Needs/Goal and prototype demonstrations
 - **Matin**:
     - Made the drone-design-5 CAD volume larger to accommodate all the electronics going inside.
     - Placed all drone-design-5 files in its own subdirectory (for cleanliness).
