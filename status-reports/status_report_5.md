@@ -1,10 +1,11 @@
 # Status Report 5
 
 ## Achievements from before:
-- text
+- changed the path of the project to something thats acheivable
 
 ## Setbacks from before:
-- text
+- Still waiting for parts
+- changed needs and goal states to something with purpose to fits our project better
 
 ## Who Did What:
 - **Christian**:
