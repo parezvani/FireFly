@@ -36,6 +36,3 @@
 - **Done**:
     - Circuit schematic
     - Needs and Goals finalized 
-
-## ...
-- ...
