@@ -34,7 +34,10 @@
     - Edited Design doc, added personas, Needs and Goal, and any existing reserach
     - cleaned up the github build files
 - **Ryan**:
-    - text
+    - Researched controller app
+    - wrote code to connect establish the wifi router on the esp
+    - succesfully connected the esp to the app
+    - submited new materials
 
 ## To-do, In-progress, Done:
 - **To-do**:
