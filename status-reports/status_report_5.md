@@ -9,7 +9,7 @@
 
 ## Who Did What:
 - **Christian**:
-    - text
+    - Worked on Design Document
 - **Kenny**:
     - Built a prototype of the motor and motor controller
     - Used an H-bridge found at BELS to link the ESP and the motor together
