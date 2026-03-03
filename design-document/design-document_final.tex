@@ -170,27 +170,52 @@ FireFly targets the specific gap the literature acknowledges but has not fully a
 
 \subsection{Sustainability Statement}
 
+The FireFly project is committed to the "Design for Environment" philosophy. Our goal is to provide a high-tech solution for wildfire mitigation while ensuring that the lifecycle of the drone itself does not offset its environmental benefits.
+
+\vspace{1em}
+
+
+\textbf{Environmental Stewardship:} 
+The primary purpose of FireFly is the preservation of biodiversity and carbon sinks by preventing catastrophic wildfires. By providing early-warning data in the "pre-fire window," we reduce the need for large-scale, carbon-intensive emergency responses (such as heavy tanker aircraft and ground fleets). Furthermore, by utilizing electric propulsion over internal combustion, we ensure zero-emission operation during monitoring flights.
+
+\vspace{1em}
+
+
+\textbf{Material Selection and Circularity:} 
+To minimize our manufacturing footprint, we have opted for 3D-printed components using \textbf{PLA}. PLA is a bio-based, industrially compostable polymer derived from renewable resources like corn starch. By using additive manufacturing, we significantly reduce material waste compared to traditional subtractive machining.
+
+\vspace{1em}
+
+
+\textbf{Life Cycle \& Battery Management:} 
+We recognize that Lithium-Polymer (LiPo) batteries pose a chemical risk if disposed of improperly. Our operational plan includes a strict "End-of-Life" protocol where degraded cells are discharged and taken to certified e-waste recycling centers. We have designed the electronics with standardized connectors to ensure that sensors and flight controllers can be harvested and reused in future iterations of the platform, extending the functional life of the high-value silicon components.
+
+\vspace{1em}
+
+
+\textbf{Social and Safety Impact:} 
+Sustainability includes the protection of human capital. FireFly enhances the safety of first responders (such as our "Marcus" persona) by providing situational awareness in hazardous terrains without risking human life. By creating a rapidly deployable tool, we democratize access to advanced fire-monitoring technology for smaller forestry divisions and academic researchers who may lack the budget for satellite-based or manned aerial surveillance.
 
 
 \vspace{1in}
 
+\newpage
+
+ %--- Design ---
 \section{Design}
 
-\subsection{System Requirements}
-[functional requirements.]
+\subsection{Aesthetic Prototype}
 
-[payload, flight time, range, sensor capabilities.]
-
+\vspace{2em}
 
 
-\subsection{System Architecture}
-[overall block diagram.]
+\subsection{Design for Manufacture, Assembly, Maintenance}
 
-[flight controller, power, propulsion, communication, sensor bus.]
+\vspace{2em}
 
 
 
-\subsection{Mechanical Design}
+\subsection{Block Diagrams}
 [frame layout and mounting points for motor, battery, ...]
 \begin{figure}[htbp]
     \centering
@@ -199,34 +224,31 @@ FireFly targets the specific gap the literature acknowledges but has not fully a
     \label{fig:titration}
 \end{figure}
 
+\subsection{Wiring Diagrams}
+
+\vspace{0.5in}
 
 
-\subsection{Power and Propulsion Modules}
-Our design uses a 4-motor propulsion system with a high KV rating, giving the drone the thrust and responsiveness needed to handle a wider range of operating conditions. The higher KV motors help the platform maintain stable flight so onboard sensors can take accurate readings. For power, we use LiPo batteries because they provide high energy density while keeping the package compact. A smaller, lighter battery reduces overall weight, which lowers the load on the motors and helps extend flight time.
+\subsection{State Transition Diagrams}
+
+\vspace{0.5in}
 
 
+\subsection{Technology ( languages, hardware, etc. )}
 
-\subsection{Sensor and Payload Modules}
-[information about supported sensors (LiDAR, camera, ...), maximum excess payload, etc.]
-
-
-
-\subsection{Electronics and Control}
-[how to control the drone, what is needed for control, etc.]
-
-
-
-\subsection{Safety and Reliability}
-[testing logs and proof that it can take damage and handle failures.]
-
-[physical safety information: prop guards, connector keying to avoid misplugging.]
+\vspace{0.5in}
 
 
 
-\subsection{Testing and Validation}
-[bench tests for each module.]
+\subsection{Simulations}
 
-[flight tests and criteria.]
+
+\vspace{0.5in}
+
+
+
+
+
 
 \newpage
 
@@ -274,6 +296,100 @@ Our design uses a 4-motor propulsion system with a high KV rating, giving the dr
 \end{table}
 
 
+\newpage
 
+% --- Appendix 1: Problem Formulation ---
+\newpage
+\section{Appendix 1 - Problem Formulation}
 
-\end{document}
+\subsection{Conceptualisations}
+[...]
+
+\subsection{Brainstorming}
+[...]
+
+\subsection{Decision Tables}
+% Example of a simple decision table for motor selection
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|l|c|c|c|}
+        \hline
+        \textbf{Criteria} & \textbf{Option A (High KV)} & \textbf{Option B (Low KV)} & \textbf{Weight} \\ \hline
+        Thrust-to-Weight & 5 & 3 & 40\% \\ \hline
+        Efficiency & 5 & 5 & 40\% \\ \hline
+        Air Time & 5 & 8 & 20\% \\ \hline
+        \textbf{Total Score} & \textbf{4.0} & \textbf{4.0} & \textbf{100\%} \\ \hline
+    \end{tabular}
+    \caption{Motor Selection Decision Matrix}
+\end{table}
+
+\subsection{Morphological Charts}
+The following combinations were explored for the primary subsystems:
+\begin{itemize}
+    \item \textbf{Frame:} ...
+    \item \textbf{Telemetry:} ...
+\end{itemize}
+
+% --- Appendix 2: Planning ---
+\newpage
+\section{Appendix 2 - Planning}
+
+\subsection{Basic Plan / Gantt Chart}
+[...]
+
+\subsection{Division of Labor}
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|l|l|}
+        \hline
+        \textbf{Team Member} & \textbf{Primary Responsibility} \\ \hline
+        Christian Li & Flight Controller Programming \\ \hline
+        Kenny Wang & Hardware Integration \\ \hline
+        Kevin Yao & Mechanical Design / CAD \\ \hline
+        Matin Sobhani & Mechanical Design / CAD \\ \hline
+        Nick Lafredo & Power Systems / Documentation \\ \hline
+        Parsa Rezvani & Testing and Validation / product manager \\ \hline
+        Ryan Yu & Telemetry and Documentation \\ \hline
+    \end{tabular}
+    \caption{Division of Labor during Prototyping}
+\end{table}
+
+\subsection{Collaboration}
+[...]
+
+% --- Appendix 3: Test Plan & Results ---
+\newpage
+\section{Appendix 3 - Test Plan \& Results}
+The test plan consists of three phases:
+\begin{enumerate}
+    \item \textbf{Bench Testing:} ...
+    \item \textbf{Tethered Flight:} ...
+    \item \textbf{Open Field Flight:} ...
+\end{enumerate}
+
+% --- Appendix 4: Review ---
+\newpage
+\section{Appendix 4 - Review}
+\textit{Reflection of each team members thoughts on the project.}
+
+\textbf{Christian Li:} [Reflection text here...]
+\vspace{1em}
+
+\textbf{Kenny Wang:} [Reflection text here...]
+\vspace{1em}
+
+\textbf{Kevin Yao:} [Reflection text here...]
+\vspace{1em}
+
+\textbf{Matin Sobhani:} [Reflection text here...]
+\vspace{1em}
+
+\textbf{Nick Lafredo:} [Reflection text here...]
+\vspace{1em}
+
+\textbf{Parsa Rezvani:} [Reflection text here...]
+\vspace{1em}
+
+\textbf{Ryan Yu:} [Reflection text here...]
+
+\end{document}\end{document}
