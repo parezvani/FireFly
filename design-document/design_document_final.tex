@@ -1,24 +1,24 @@
 \documentclass[journal, onecolumn]{IEEEtran}
 
 \usepackage{titlesec}
-\usepackage{graphicx} % Required for inserting images
-\usepackage{array} % Required for text wrapping in tables
+\usepackage{graphicx}
+\usepackage{array}
 \usepackage{makecell}
 \usepackage{float}
 \usepackage{caption}
 \usepackage{wrapfig}
 
 \titleformat{\section}
- {\normalfont\bfseries} % bold, normal font size
- {\thesection} % section number
- {1em} % space between number and title
- {} % before-code (empty = left aligned)
+    {\normalfont\bfseries}
+    {\thesection}
+    {1em}
+    {}
 
 \titleformat{\subsection}
- {\normalfont\bfseries}
- {\thesubsection}
- {1em}
- {}
+    {\normalfont\bfseries}
+    {\thesubsection}
+    {1em}
+    {}
 
 \renewcommand\thesection{\arabic{section}}
 \renewcommand\thesubsection{\thesection.\arabic{subsection}}
@@ -31,9 +31,6 @@
 \date{\today}
 
 \maketitle
-
-
-
 
 \begin{figure*}[!t]
     \centering
@@ -57,7 +54,6 @@
 
 \vspace{1in}
 
-
 \begin{abstract}
 This document explains how to design, build, and operate the FireFly FireWatch Drone.
 \end{abstract}
@@ -67,23 +63,25 @@ none
 \end{IEEEkeywords}
 
 \newpage
+
+% ============================================================
 \section*{Executive Summary}
+% ============================================================
+
 FireFly is a rapidly deployable quadcopter platform designed as a first-response environmental monitoring tool for high wildfire-risk areas with little or no sensor infrastructure. The system integrates temperature, humidity, and smoke sensing with live data transmission to a ground station, enabling early awareness and alerts when fire-risk is detected. Its mechanical and electrical architecture allows it to adapt to different terrains and sensing requirements.
 
 The design section of the document specifies system requirements for payload capacity, flight time, communication range, and sensor capability. It targets operation in terrain suited poorly for manual monitoring. The architecture defines the flight controller, power distribution, propulsion stack, communication link, and sensor bus. The mechanical design focuses on a 3D-printed frame with mounting points for motors, batteries, and payloads.
 
-Power and propulsion modules are chosen to maximize flight time, while keeping a stable rate of power consumption. Sensor and payload modules include environmental sensors that measure temperature, humidity, and smoke concentration to support fire monitoring. The electronics and control subsection describes how the flight controller interfaces with ESC, receivers, and sensors over buses.
+Power and propulsion modules are chosen to maximize flight time while keeping a stable rate of power consumption. Sensor and payload modules include environmental sensors that measure temperature, humidity, and smoke concentration to support fire monitoring. The electronics and control subsection describes how the flight controller interfaces with ESC, receivers, and sensors over buses.
 
-Safety and reliability are assured through design features and planned validation. Propeller guards and keyed connectors prevent user error and physical hazards. The document outlines bench testing for individual modules (power, propulsion, sensors, communications) and flight testing for stable hover, controlled movement, data link, and detection of smoke/temperature. These elements aim to demonstrate that FireFly can serve as a practical platform for wildfire monitoring and emergency response research.
-
- 
-
-
+Safety and reliability are assured through design features and planned validation. Propeller guards and keyed connectors prevent user error and physical hazards. The document outlines bench testing for individual modules (power, propulsion, sensors, communications) and flight testing for stable hover, controlled movement, data link, and detection of smoke and temperature. These elements aim to demonstrate that FireFly can serve as a practical platform for wildfire monitoring and emergency response research.
 
 \clearpage
 
-
+% ============================================================
 \section{Introduction}
+% ============================================================
+
 This document contains all the information needed to design and use the FireFly Drone.
 
 \vspace{1em}
@@ -96,14 +94,13 @@ For wildfire response specifically, the challenge is compounded by geography. Hi
 
 \vspace{1em}
 
-
 FireFly addresses this gap directly. By deploying a sensor-equipped quadcopter into areas with zero existing infrastructure, FireFly enables real-time collection of temperature, humidity, and smoke data during the pre-fire window, transmitting live readings to a ground station and triggering alerts when fire risk thresholds are crossed. The platform is designed for rapid deployment by field crews without requiring extensive training or specialized support, transforming what would otherwise be a period of uncertainty into a structured, data-driven response.
 
 \subsection{Need Statement}
-A rapidly deployable drone that can be launched immediately into high fire-risk areas with zero sensor infrastructure, collecting real-time temperature, humidity, and smoke data during the high-risk window before a fire occurs.
+Remote and high fire-risk areas lack the sensor infrastructure necessary to monitor environmental conditions during the critical pre-fire window, leaving fire response teams without the real-time data needed to act early.
 
 \subsection{Goal Statement}
-Prove that a drone can function as a first response, environmental monitoring tool by integrating a smoke and temperature sensor, transmitting live readings to a ground station, and triggering alerts when fire risk thresholds are crossed.
+Provide fire response teams with real-time temperature, humidity, and smoke readings from high-risk, infrastructure-free terrain by deploying a rapidly mobilized monitoring system that transmits live data to a ground station and alerts operators when fire risk thresholds are crossed.
 
 \subsection{Personas}
 Individuals with experience levels ranging from novice to expert in fire monitoring and environmental fieldwork.
@@ -117,7 +114,7 @@ Individuals with experience levels ranging from novice to expert in fire monitor
 \textit{Role:} Wildfire Operations Coordinator (professional first responder) \\
 \textit{Background / Context:} Works with a state forestry division managing prescribed burns and post-fire monitoring. Needs something fast that he can hand off to field crews without extensive training. \\
 \textit{Goals:} Rapid deployment of sensor-equipped drones into areas too dangerous or inaccessible for personnel during the high-risk pre-fire window. Wants real-time smoke and temperature data without putting people in harm's way. \\
-\textit{Behaviors:} Works under time pressure, values reliability over features, and coordinates with multiple agencies. Skeptical of unproven technology. Practical if it breaks in the field, it needs to be fixable on-site with minimal tools. \\
+\textit{Behaviors:} Works under time pressure, values reliability over features, and coordinates with multiple agencies. Skeptical of unproven technology. Practical --- if it breaks in the field, it needs to be fixable on-site with minimal tools. \\
 \textit{Expectations:} A rugged, simple-to-operate platform that can be deployed at a moment's notice. Wants clear threshold alerts he can act on immediately.
 
 \vspace{1em}
@@ -133,6 +130,7 @@ Individuals with experience levels ranging from novice to expert in fire monitor
 \textit{Expectations:} A reliable platform with a clear data pipeline she can connect to her existing research database, and results trustworthy enough to cite.
 
 \vspace{1em}
+
 \subsubsection*{Experts / Consultants}
 
 \begin{wrapfigure}{l}{0.2\textwidth}
@@ -146,9 +144,8 @@ Individuals with experience levels ranging from novice to expert in fire monitor
 \textit{Expectations:} A platform sound enough in its sensor selection and alert logic that field results can be trusted and the methodology can be defended to other scientists.
 
 \vspace{1em}
-\subsubsection*{Client}
-\vspace{1em}
 
+\subsubsection*{Client}
 
 \begin{wrapfigure}{l}{0.2\textwidth}
     \includegraphics[width=0.18\textwidth]{images/usfs.png}
@@ -158,8 +155,7 @@ Individuals with experience levels ranging from novice to expert in fire monitor
 \textit{Background / Context:} Responsible for fire prevention, monitoring, and response across millions of acres of national forest, much of it roadless wilderness with no existing sensor infrastructure. Currently relies on satellite imagery, fire lookout towers, and aerial patrols, all of which have coverage gaps and response delays during the highest-risk windows. \\
 \textit{Goals:} Evaluate FireFly as a rapidly deployable supplement to existing monitoring systems for areas where infrastructure cannot operate. Interested in whether the platform can reliably trigger alerts before a fire establishes. \\
 \textit{Behaviors:} Evaluates tools based on operational reliability and ease of use for non-specialist field crews. Requires demonstrated performance data before recommending adoption. \\
-\textit{Expectations:} A working prototype that proves the core concept, zero-infrastructure deployment, live sensor transmission, and threshold-based alerting, with documentation clear enough for field personnel to operate without engineering support.
-
+\textit{Expectations:} A working prototype that proves the core concept --- zero-infrastructure deployment, live sensor transmission, and threshold-based alerting --- with documentation clear enough for field personnel to operate without engineering support.
 
 \subsection{Existing Research}
 Drone-based wildfire monitoring is an active research area, yet a clear gap remains for rapidly deployable, infrastructure-independent platforms targeting the pre-fire window in remote terrain.
@@ -170,116 +166,92 @@ FireFly targets the specific gap the literature acknowledges but has not fully a
 
 \subsection{Sustainability Statement}
 
-The FireFly project is committed to the "Design for Environment" philosophy. Our goal is to provide a high-tech solution for wildfire mitigation while ensuring that the lifecycle of the drone itself does not offset its environmental benefits.
+The FireFly project is committed to the ``Design for Environment'' philosophy. Our goal is to provide a high-tech solution for wildfire mitigation while ensuring that the lifecycle of the drone itself does not offset its environmental benefits.
 
 \vspace{1em}
 
-
-\textbf{Environmental Stewardship:} 
-The primary purpose of FireFly is the preservation of biodiversity and carbon sinks by preventing catastrophic wildfires. By providing early-warning data in the "pre-fire window," we reduce the need for large-scale, carbon-intensive emergency responses (such as heavy tanker aircraft and ground fleets). Furthermore, by utilizing electric propulsion over internal combustion, we ensure zero-emission operation during monitoring flights.
+\textbf{Environmental Stewardship:}
+The primary purpose of FireFly is the preservation of biodiversity and carbon sinks by preventing catastrophic wildfires. By providing early-warning data in the pre-fire window, we reduce the need for large-scale, carbon-intensive emergency responses such as heavy tanker aircraft and ground fleets. Furthermore, by utilizing electric propulsion over internal combustion, we ensure zero-emission operation during monitoring flights.
 
 \vspace{1em}
 
-
-\textbf{Material Selection and Circularity:} 
+\textbf{Material Selection and Circularity:}
 To minimize our manufacturing footprint, we have opted for 3D-printed components using \textbf{PLA}. PLA is a bio-based, industrially compostable polymer derived from renewable resources like corn starch. By using additive manufacturing, we significantly reduce material waste compared to traditional subtractive machining.
 
 \vspace{1em}
 
-
-\textbf{Life Cycle \& Battery Management:} 
-We recognize that Lithium-Polymer (LiPo) batteries pose a chemical risk if disposed of improperly. Our operational plan includes a strict "End-of-Life" protocol where degraded cells are discharged and taken to certified e-waste recycling centers. We have designed the electronics with standardized connectors to ensure that sensors and flight controllers can be harvested and reused in future iterations of the platform, extending the functional life of the high-value silicon components.
+\textbf{Life Cycle and Battery Management:}
+We recognize that Lithium-Polymer (LiPo) batteries pose a chemical risk if disposed of improperly. Our operational plan includes a strict end-of-life protocol where degraded cells are discharged and taken to certified e-waste recycling centers. We have designed the electronics with standardized connectors to ensure that sensors and flight controllers can be harvested and reused in future iterations of the platform, extending the functional life of the high-value silicon components.
 
 \vspace{1em}
 
-
-\textbf{Social and Safety Impact:} 
-Sustainability includes the protection of human capital. FireFly enhances the safety of first responders (such as our "Marcus" persona) by providing situational awareness in hazardous terrains without risking human life. By creating a rapidly deployable tool, we democratize access to advanced fire-monitoring technology for smaller forestry divisions and academic researchers who may lack the budget for satellite-based or manned aerial surveillance.
-
-
-\vspace{1in}
+\textbf{Social and Safety Impact:}
+Sustainability includes the protection of human capital. FireFly enhances the safety of first responders by providing situational awareness in hazardous terrains without risking human life. By creating a rapidly deployable tool, we democratize access to advanced fire-monitoring technology for smaller forestry divisions and academic researchers who may lack the budget for satellite-based or manned aerial surveillance.
 
 \newpage
 
- %--- Design ---
+% ============================================================
 \section{Design}
+% ============================================================
 
 \subsection{Aesthetic Prototype}
 
 \vspace{2em}
 
-
 \subsection{Design for Manufacture, Assembly, Maintenance}
 
 \vspace{2em}
 
-
-
 \subsection{Block Diagrams}
-[frame layout and mounting points for motor, battery, ...]
-
 
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.5\textwidth]{images/Schematic_Design.png}
     \caption{A high level schematic of our drone.}
-    \label{fig:schematic}
+    \label{fig:schematic_design}
 \end{figure}
 
 \subsection{Wiring Diagrams}
-\vspace{0.5in}
 
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=0.75\textwidth]{images/Circuit Diagram.png}
     \caption{Circuit Diagram}
-    \label{fig:schematic}
+    \label{fig:circuit_diagram}
 \end{figure}
 
-
-
+\vspace{1in}
 
 \subsection{State Transition Diagrams}
 
-\vspace{0.5in}
-
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.75\textwidth]{images/State Transition Diagram.png}
     \caption{State Transition Diagram}
-    \label{fig:schematic}
+    \label{fig:state_transition}
 \end{figure}
 
-\subsection{Technology ( languages, hardware, etc. )}
+\subsection{Technology (Languages, Hardware, etc.)}
+
 FireFly uses a two-node ESP32-C3 architecture connected via the ESP-NOW protocol. The drone carries an ESP32-C3 microcontroller that reads sensor data from a BME280 (temperature and humidity) and an MQ-2 (smoke detection), packages the readings into a structured telemetry packet, and transmits it wirelessly to a ground receiver using ESP-NOW. ESP-NOW is a connectionless peer-to-peer protocol operating on the 2.4GHz band with a range of approximately 400 meters line-of-sight and latency under 10ms, making it well suited for remote wildfire monitoring scenarios where reliable low-latency telemetry is critical.
 
-\vspace{0.25em}
+\vspace{0.5em}
 
 The ground station consists of a second ESP32-C3 that registers as an ESP-NOW receiver, unpacks the incoming telemetry struct, and forwards the data as a JSON stream over USB serial to a host machine. The host machine runs a Python Flask server that reads the serial stream and exposes a local HTTP endpoint, which a browser-based dashboard polls at one-second intervals to display live sensor readings. Firmware on both ESP32-C3 devices is written in C using the ESP-IDF framework, with the ground station dashboard implemented in Python and JavaScript.
 
-
-\vspace{0.5in}
-
-
-
 \subsection{Simulations}
-Before building and flying, we used simulation tools to verify that the FireFly configuration can sustain flight, carry its sensor payload, and meet the core mission requirement of delivering real-time environmental data during the pre-fire window.An online multicopter calculator (eCalc xcopterCalc) was used to evaluate combinations of frame size, motors, propellers, and battery against thrust-to-weight ratio, hover throttle, current draw, and expected flight time under sensor payload assumptions. This confirmed that the selected hardware provides sufficient thrust margin to carry the BME280 temperature/humidity sensor and MQ-2 smoke detector while maintaining acceptable hover efficiency and a flight time long enough to collect and transmit meaningful readings to the ground station.
 
-\vspace{0.25em}
- 
-A simplified quadcopter dynamics model was used to tune attitude and altitude control parameters, verifying that the platform can hold a stable position over a monitoring area, a prerequisite for consistent sensor sampling. Research on quadcopter modeling confirms that such simulations can predict controller behavior and reduce the number of risky test flights needed to achieve stable flight. Together, these simulations provide evidence that FireFly can meet its need statement requirements reaching areas with zero sensor infrastructure and sustaining flight long enough to collect and transmit temperature, humidity, and smoke data, before committing to full implementation and field testing.
+Before building and flying, we used simulation tools to verify that the FireFly configuration can sustain flight, carry its sensor payload, and meet the core mission requirement of delivering real-time environmental data during the pre-fire window. An online multicopter calculator (eCalc xcopterCalc) was used to evaluate combinations of frame size, motors, propellers, and battery against thrust-to-weight ratio, hover throttle, current draw, and expected flight time under sensor payload assumptions. This confirmed that the selected hardware provides sufficient thrust margin to carry the BME280 temperature/humidity sensor and MQ-2 smoke detector while maintaining acceptable hover efficiency and a flight time long enough to collect and transmit meaningful readings to the ground station.
 
-\vspace{0.5in}
+\vspace{0.5em}
 
-
-
-
-
+A simplified quadcopter dynamics model was used to tune attitude and altitude control parameters, verifying that the platform can hold a stable position over a monitoring area --- a prerequisite for consistent sensor sampling. Research on quadcopter modeling confirms that such simulations can predict controller behavior and reduce the number of risky test flights needed to achieve stable flight. Together, these simulations provide evidence that FireFly can meet its need statement requirements: reaching areas with zero sensor infrastructure and sustaining flight long enough to collect and transmit temperature, humidity, and smoke data before committing to full implementation and field testing.
 
 \newpage
 
+% ============================================================
 \section{Parts List}
-
+% ============================================================
 
 \begin{table}[H]
     \centering
@@ -315,12 +287,11 @@ A simplified quadcopter dynamics model was used to tune attitude and altitude co
     \label{tab:budget}
 \end{table}
 
-
 \newpage
 
-% --- Appendix 1: Problem Formulation ---
-\newpage
+% ============================================================
 \section{Appendix 1 - Problem Formulation}
+% ============================================================
 
 \subsection{Conceptualisations}
 [...]
@@ -329,16 +300,21 @@ A simplified quadcopter dynamics model was used to tune attitude and altitude co
 [...]
 
 \subsection{Decision Tables}
-% Example of a simple decision table for motor selection
+
 \begin{table}[H]
     \centering
     \begin{tabular}{|l|c|c|c|}
         \hline
-        \textbf{Criteria} & \textbf{Option A (High KV)} & \textbf{Option B (Low KV)} & \textbf{Weight} \\ \hline
-        Thrust-to-Weight & 5 & 3 & 40\% \\ \hline
-        Efficiency & 5 & 5 & 40\% \\ \hline
-        Air Time & 5 & 8 & 20\% \\ \hline
-        \textbf{Total Score} & \textbf{4.0} & \textbf{4.0} & \textbf{100\%} \\ \hline
+        \textbf{Criteria} & \textbf{Option A (High KV)} & \textbf{Option B (Low KV)} & \textbf{Weight} \\
+        \hline
+        Thrust-to-Weight & 5 & 3 & 40\% \\
+        \hline
+        Efficiency & 5 & 5 & 40\% \\
+        \hline
+        Air Time & 5 & 8 & 20\% \\
+        \hline
+        \textbf{Total Score} & \textbf{4.0} & \textbf{4.0} & \textbf{100\%} \\
+        \hline
     \end{tabular}
     \caption{Motor Selection Decision Matrix}
 \end{table}
@@ -350,26 +326,37 @@ The following combinations were explored for the primary subsystems:
     \item \textbf{Telemetry:} ...
 \end{itemize}
 
-% --- Appendix 2: Planning ---
 \newpage
+
+% ============================================================
 \section{Appendix 2 - Planning}
+% ============================================================
 
 \subsection{Basic Plan / Gantt Chart}
 [...]
 
 \subsection{Division of Labor}
+
 \begin{table}[H]
     \centering
     \begin{tabular}{|l|l|}
         \hline
-        \textbf{Team Member} & \textbf{Primary Responsibility} \\ \hline
-        Christian Li & Flight Controller Programming \\ \hline
-        Kenny Wang & Hardware Integration \\ \hline
-        Kevin Yao & Mechanical Design / CAD \\ \hline
-        Matin Sobhani & Mechanical Design / CAD \\ \hline
-        Nick Lafredo & Power Systems / Documentation \\ \hline
-        Parsa Rezvani & Testing and Validation / product manager \\ \hline
-        Ryan Yu & Telemetry and Documentation \\ \hline
+        \textbf{Team Member} & \textbf{Primary Responsibility} \\
+        \hline
+        Christian Li & Flight Controller Programming \\
+        \hline
+        Kenny Wang & Hardware Integration \\
+        \hline
+        Kevin Yao & Mechanical Design / CAD \\
+        \hline
+        Matin Sobhani & Mechanical Design / CAD \\
+        \hline
+        Nick Lafredo & Power Systems / Documentation \\
+        \hline
+        Parsa Rezvani & Testing and Validation / Product Manager \\
+        \hline
+        Ryan Yu & Telemetry and Documentation \\
+        \hline
     \end{tabular}
     \caption{Division of Labor during Prototyping}
 \end{table}
@@ -377,9 +364,12 @@ The following combinations were explored for the primary subsystems:
 \subsection{Collaboration}
 [...]
 
-% --- Appendix 3: Test Plan & Results ---
 \newpage
+
+% ============================================================
 \section{Appendix 3 - Test Plan \& Results}
+% ============================================================
+
 The test plan consists of three phases:
 \begin{enumerate}
     \item \textbf{Bench Testing:} ...
@@ -387,29 +377,40 @@ The test plan consists of three phases:
     \item \textbf{Open Field Flight:} ...
 \end{enumerate}
 
-% --- Appendix 4: Review ---
 \newpage
-\section{Appendix 4 - Review}
-\textit{Reflection of each team members thoughts on the project.}
 
-\textbf{Christian Li:} [Reflection text here...]
+% ============================================================
+\section{Appendix 4 - Review}
+% ============================================================
+
+\textit{Reflection of each team member's thoughts on the project.}
+
 \vspace{1em}
 
-\textbf{Kenny Wang:} Restarting this project I think that we should focus on not building a product that interests us but develop the idea based on a universal problem or a need. From there we can then focus on implementing it in a way that can handle this universal problem or need. For example, if we had started with the problem being that we have no way of reaching remote areas with no fire detection, we can then build upon that and not just specifically building a flying drone but maybe a rover, or even something that does not even have to move. There would be a variety of implementations of helping alleviate the same problem and need while having numerous amounts of angles to implement that solution. Even with some setbacks that we faced during the beginning stages of the project we were able to have good communication within the team to implement these changes so that we were able to complete our design work. 
+\textbf{Christian Li:} [Reflection text here...]
+
+\vspace{1em}
+
+\textbf{Kenny Wang:} Restarting this project I think that we should focus on not building a product that interests us but develop the idea based on a universal problem or a need. From there we can then focus on implementing it in a way that can handle this universal problem or need. For example, if we had started with the problem being that we have no way of reaching remote areas with no fire detection, we can then build upon that and not just specifically building a flying drone but maybe a rover, or even something that does not even have to move. There would be a variety of implementations of helping alleviate the same problem and need while having numerous amounts of angles to implement that solution. Even with some setbacks that we faced during the beginning stages of the project we were able to have good communication within the team to implement these changes so that we were able to complete our design work.
+
 \vspace{1em}
 
 \textbf{Kevin Yao:} [Reflection text here...]
+
 \vspace{1em}
 
 \textbf{Matin Sobhani:} If we were starting this project again, I would make sure we had a solid need/goal statement, and verified it with the TA and professor. We thought we had a solid one early on around week 4, but ended up having to change it around week 8. Thankfully this didn't affect us negatively too much considering our underlying prototype idea is still the same. What went well is the fact that we were very communicative throughout the project and always kept up-to-date.
+
 \vspace{1em}
 
 \textbf{Nick Lafredo:} [Reflection text here...]
+
 \vspace{1em}
 
 \textbf{Parsa Rezvani:} [Reflection text here...]
+
 \vspace{1em}
 
 \textbf{Ryan Yu:} [Reflection text here...]
 
-\end{document}\end{document}
+\end{document}
