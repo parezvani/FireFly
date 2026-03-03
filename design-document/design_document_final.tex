@@ -243,9 +243,11 @@ Sustainability includes the protection of human capital. FireFly enhances the sa
 
 
 \subsection{Technology ( languages, hardware, etc. )}
-FireFly uses a modular hardware and software stack organized around an ESP microcontroller on each drone and a Wi-Fi mesh backhaul to the base station. Each drone carries an ESP32-based node that handles local sensor data (temperature, humidity, smoke, and range), basic flight control interfacing, and an ESP-WIFI-MESH style network. Nodes of this network act as both clients and relays so that data can hop across multiple drones before reaching the ground station. This mesh extends coverage beyond line of sight of any single link and allows a swarm of FireFly units to operate as a distributed environmental sensor network in remote terrain.
+FireFly uses a two-node ESP32-C3 architecture connected via the ESP-NOW protocol. The drone carries an ESP32-C3 microcontroller that reads sensor data from a BME280 (temperature and humidity) and an MQ-2 (smoke detection), packages the readings into a structured telemetry packet, and transmits it wirelessly to a ground receiver using ESP-NOW. ESP-NOW is a connectionless peer-to-peer protocol operating on the 2.4GHz band with a range of approximately 400 meters line-of-sight and latency under 10ms, making it well suited for remote wildfire monitoring scenarios where reliable low-latency telemetry is critical.
 
-On top of the mesh transport, each node uses a lightweight HTTP server for telemetry and configuration. Sensor readings are packaged and served over HTTP endpoints, allowing the base station to poll using standard web tooling. Similar ESP32 web server patterns are commonly used to stream temperature and humidity data from environmental monitors. The base station runs a mesh client that discovers nodes, aggregates their HTTP endpoints, and logs time stamped measurements to a central database. Firmware on the ESP devices is developed in C/C++ using the ESP-IDF, with higher level data processing handled in Python.
+\vspace{0.25em}
+
+The ground station consists of a second ESP32-C3 that registers as an ESP-NOW receiver, unpacks the incoming telemetry struct, and forwards the data as a JSON stream over USB serial to a host machine. The host machine runs a Python Flask server that reads the serial stream and exposes a local HTTP endpoint, which a browser-based dashboard polls at one-second intervals to display live sensor readings. Firmware on both ESP32-C3 devices is written in C using the ESP-IDF framework, with the ground station dashboard implemented in Python and JavaScript.
 
 
 \vspace{0.5in}
@@ -253,12 +255,13 @@ On top of the mesh transport, each node uses a lightweight HTTP server for telem
 
 
 \subsection{Simulations}
-Before building and flying, we used simulation tools to verify that the FireFly configuration can actually sustain flight and meet basic performance targets. An online multicopter calculator (eCalc xcopterCalc) was used to compare combinations of frame size, motors, propellers, battery, thrust to weight ratio, hover throttle, current draw, and expected flight time under different payload assumptions. This helped us decide on a parts list that provides sufficient thrust margin and acceptable hover efficiency without over-sizing the power system. 
+Before building and flying, we used simulation tools to verify that the FireFly configuration can sustain flight, carry its sensor payload, and meet the core mission requirement of delivering real-time environmental data during the pre-fire window.An online multicopter calculator (eCalc xcopterCalc) was used to evaluate combinations of frame size, motors, propellers, and battery against thrust-to-weight ratio, hover throttle, current draw, and expected flight time under sensor payload assumptions. This confirmed that the selected hardware provides sufficient thrust margin to carry the BME280 temperature/humidity sensor and MQ-2 smoke detector while maintaining acceptable hover efficiency and a flight time long enough to collect and transmit meaningful readings to the ground station.
 
-We use a simplified quadcopter dynamics model to tune basic attitude and altitude control parameters and to check that responses remain stable with the chosen design. Research on quadcopter modeling shows that such simulations can predict controller behavior and reduce the number of risky test flights needed to achieve stable flight. Together, the sizing calculator and dynamics simulations provide evidence that the hardware can meet FireFly’s flight time and payload requirements before committing to full implementation and field testing. 
+\vspace{0.25em}
+ 
+A simplified quadcopter dynamics model was used to tune attitude and altitude control parameters, verifying that the platform can hold a stable position over a monitoring area, a prerequisite for consistent sensor sampling. Research on quadcopter modeling confirms that such simulations can predict controller behavior and reduce the number of risky test flights needed to achieve stable flight. Together, these simulations provide evidence that FireFly can meet its need statement requirements reaching areas with zero sensor infrastructure and sustaining flight long enough to collect and transmit temperature, humidity, and smoke data, before committing to full implementation and field testing.
 
 \vspace{0.5in}
-
 
 
 
