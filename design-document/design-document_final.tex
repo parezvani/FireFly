@@ -235,13 +235,19 @@ Sustainability includes the protection of human capital. FireFly enhances the sa
 
 
 \subsection{Technology ( languages, hardware, etc. )}
+FireFly uses a modular hardware and software stack organized around an ESP microcontroller on each drone and a Wi-Fi mesh backhaul to the base station. Each drone carries an ESP32-based node that handles local sensor data (temperature, humidity, smoke, and range), basic flight control interfacing, and an ESP-WIFI-MESH style network. Nodes of this network act as both clients and relays so that data can hop across multiple drones before reaching the ground station. This mesh extends coverage beyond line of sight of any single link and allows a swarm of FireFly units to operate as a distributed environmental sensor network in remote terrain.
+
+On top of the mesh transport, each node uses a lightweight HTTP server for telemetry and configuration. Sensor readings are packaged and served over HTTP endpoints, allowing the base station to poll using standard web tooling. Similar ESP32 web server patterns are commonly used to stream temperature and humidity data from environmental monitors. The base station runs a mesh client that discovers nodes, aggregates their HTTP endpoints, and logs time stamped measurements to a central database. Firmware on the ESP devices is developed in C/C++ using the ESP-IDF, with higher level data processing handled in Python.
+
 
 \vspace{0.5in}
 
 
 
 \subsection{Simulations}
+Before building and flying, we used simulation tools to verify that the FireFly configuration can actually sustain flight and meet basic performance targets. An online multicopter calculator (eCalc xcopterCalc) was used to compare combinations of frame size, motors, propellers, battery, thrust to weight ratio, hover throttle, current draw, and expected flight time under different payload assumptions. This helped us decide on a parts list that provides sufficient thrust margin and acceptable hover efficiency without over-sizing the power system. 
 
+We use a simplified quadcopter dynamics model to tune basic attitude and altitude control parameters and to check that responses remain stable with the chosen design. Research on quadcopter modeling shows that such simulations can predict controller behavior and reduce the number of risky test flights needed to achieve stable flight. Together, the sizing calculator and dynamics simulations provide evidence that the hardware can meet FireFly’s flight time and payload requirements before committing to full implementation and field testing. 
 
 \vspace{0.5in}
 
@@ -258,37 +264,31 @@ Sustainability includes the protection of human capital. FireFly enhances the sa
 \begin{table}[H]
     \centering
     \small
-    \begin{tabular}{|l|c|c|c|}
+    \begin{tabular}{|l|c|c|}
         \hline
-        \textbf{Part} & \textbf{Set} & \textbf{Supplier} & \textbf{Quantity} \\
+        \textbf{Part} & \textbf{Supplier} & \textbf{Quantity} \\
         \hline
-        CarbonX PLA+CF Filament & A & Creality & 1 \\
+        CarbonX PLA+CF Filament & Creality & 1 \\
         \hline
-        Battery: LiPo 850 mAh 3S 25/30C & A & HobbyKing & 1 \\
+        Battery: LiPo 850 mAh 3S 25/30C & HobbyKing & 1 \\
         \hline
-        Motor: SunnySky R1106 FPV Brushless Motors & A & Druav & 4 \\
+        Motor: SunnySky R1106 FPV Brushless Motors & Druav & 4 \\
         \hline
-        Propeller: Gemfan Hurricane 2009-3 Tri-Blade (Set of 4) & A & Pyrodrone & 1 \\
+        Propeller: Gemfan Hurricane 2009-3 Tri-Blade (Set of 4) & Pyrodrone & 1 \\
         \hline
-        Battery: 3S 1000 mAh & B & HobbyKing & 1 \\
+        Caddx Ant Lite Analog Camera (FPV Cycle Edition) & CaddxFPV & 1 \\
         \hline
-        Motor: RCINPOWER GTS 1204 5000KV & B & Pyrodrone & 4 \\
+        TFMini-S Micro LiDAR Module & SparkFun & 1 \\
         \hline
-        Propeller: HQProp T3.5x2x3 & B & GetFPV & 1 \\
+        HAKRC 20A 4-in-1 \verb|3-6S BLHeli_32| 5V 3A BEC DShot1200 Mini ESC & Alibaba & 1 \\
         \hline
-        Caddx Ant Lite Analog Camera (FPV Cycle Edition) & A / B & CaddxFPV & 1 \\
+        Perforated Circuit Board & Adafruit & 2 \\
         \hline
-        TFMini-S Micro LiDAR Module & A / B & SparkFun & 1 \\
+        Female Header Pins 2x6 & AliExpress & 4 \\
         \hline
-        HAKRC 20A 4-in-1 \verb|3-6S BLHeli_32| 5V 3A BEC DShot1200 Mini ESC & A / B & Alibaba & 1 \\
+        Female Header Pins 2x8 & AliExpress & 2 \\
         \hline
-        Perforated Circuit Board & A / B & Adafruit & 2 \\
-        \hline
-        Female Header Pins 2x6 & A / B & AliExpress & 4 \\
-        \hline
-        Female Header Pins 2x8 & A / B & AliExpress & 2 \\
-        \hline
-        Female Header Pins 2x10 & A / B & Mikroe & 2 \\
+        Female Header Pins 2x10 & Mikroe & 2 \\
         \hline
     \end{tabular}
     \caption{Itemized Budget}
