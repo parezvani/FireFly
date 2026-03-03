@@ -1,10 +1,12 @@
 # Status Report 6
 
 ## Achievements from before:
-- text
+- Recieved a few parts
+- 
 
 ## Setbacks from before:
-- text
+- Motor pod sizing mismatch with motor that came in
+- 
 
 ## Who Did What:
 - **Christian**:
@@ -24,9 +26,11 @@
 
 ## To-do, In-progress, Done:
 - **To-do**:
-    - text
+    - Waiting on remaining parts
+    - 
 - **In-progress**:
-    - text
+    - Presentation Slides
+    - Design Document
 - **Done**:
     - text
 
