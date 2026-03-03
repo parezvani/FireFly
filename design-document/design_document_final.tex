@@ -217,12 +217,6 @@ Sustainability includes the protection of human capital. FireFly enhances the sa
 
 \subsection{Block Diagrams}
 [frame layout and mounting points for motor, battery, ...]
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=0.7\textwidth]{images/HLCD_Drone_v2.jpg}
-    \caption{A circuit diagram of the connections within our drone.}
-    \label{fig:titration}
-\end{figure}
 
 
 \begin{figure}[htbp]
@@ -233,6 +227,7 @@ Sustainability includes the protection of human capital. FireFly enhances the sa
 \end{figure}
 
 \subsection{Wiring Diagrams}
+\vspace{0.5in}
 
 \begin{figure}[htbp]
     \centering
@@ -241,13 +236,19 @@ Sustainability includes the protection of human capital. FireFly enhances the sa
     \label{fig:schematic}
 \end{figure}
 
-\vspace{0.5in}
+
 
 
 \subsection{State Transition Diagrams}
 
 \vspace{0.5in}
 
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.75\textwidth]{images/State Transition Diagram.png}
+    \caption{Circuit Diagram}
+    \label{fig:schematic}
+\end{figure}
 
 \subsection{Technology ( languages, hardware, etc. )}
 FireFly uses a two-node ESP32-C3 architecture connected via the ESP-NOW protocol. The drone carries an ESP32-C3 microcontroller that reads sensor data from a BME280 (temperature and humidity) and an MQ-2 (smoke detection), packages the readings into a structured telemetry packet, and transmits it wirelessly to a ground receiver using ESP-NOW. ESP-NOW is a connectionless peer-to-peer protocol operating on the 2.4GHz band with a range of approximately 400 meters line-of-sight and latency under 10ms, making it well suited for remote wildfire monitoring scenarios where reliable low-latency telemetry is critical.
@@ -269,6 +270,7 @@ Before building and flying, we used simulation tools to verify that the FireFly 
 A simplified quadcopter dynamics model was used to tune attitude and altitude control parameters, verifying that the platform can hold a stable position over a monitoring area, a prerequisite for consistent sensor sampling. Research on quadcopter modeling confirms that such simulations can predict controller behavior and reduce the number of risky test flights needed to achieve stable flight. Together, these simulations provide evidence that FireFly can meet its need statement requirements reaching areas with zero sensor infrastructure and sustaining flight long enough to collect and transmit temperature, humidity, and smoke data, before committing to full implementation and field testing.
 
 \vspace{0.5in}
+
 
 
 
