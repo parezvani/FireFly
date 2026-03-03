@@ -196,11 +196,40 @@ Sustainability includes the protection of human capital. FireFly enhances the sa
 
 \subsection{Aesthetic Prototype}
 
-\vspace{2em}
+The FireFly aesthetic prototype follows a field-ready design language: a compact enclosed central body with rounded corners, symmetric X-arm geometry, and cylindrical motor pods at each corner. The overall form emphasizes structural clarity and quick visual inspection rather than cosmetic styling. Rounded exterior edges reduce snag points during transport, while the open-top bay and side windows communicate where electronics, wiring, and battery hardware are intended to be serviced.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.46\textwidth]{images/drone_design_5_top.png}
+    \hfill
+    \includegraphics[width=0.46\textwidth]{images/drone_design_5_corner.png}
+    \caption{FireFly CAD aesthetic prototype, iteration v5 (top and isometric views).}
+    \label{fig:drone_v5_aesthetic}
+\end{figure}
+
+The prototype evolved through multiple print-test iterations. Early versions validated basic packaging and motor placement, while later versions introduced a cleaner body-to-arm transition, larger internal volume, and improved vent/window geometry for lighter weight and faster access to internals. This iterative process preserved a consistent visual identity while converging on a more manufacturable and maintainable frame.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{images/drone_design_5_compare_1.jpeg}
+    \caption{Physical prototype progression (v1--v3) that informed the final v5 frame direction.}
+    \label{fig:drone_proto_progression}
+\end{figure}
 
 \subsection{Design for Manufacture, Assembly, Maintenance}
 
-\vspace{2em}
+\textbf{Design for Manufacture (DFM):}
+The current frame is designed as a single-piece 3D print to minimize part count and remove alignment errors. The v5 CAD envelope is approximately $100 \times 72 \times 24$ mm with $2.5$ mm floor and wall thicknesses, balancing print speed, stiffness, and mass. Arms are sized at $10.0$ mm width and $5.4$ mm thickness to maintain rigidity under motor thrust and landing loads. Motor pods are dimensioned for SunnySky R1106-class motors with built-in tolerance ($19$ mm outer diameter, $15.0$ mm inner diameter, $17$ mm height, $2.2$ mm mounting holes on a $9$ mm bolt-circle).
+
+\vspace{0.5em}
+
+\textbf{Design for Assembly (DFA):}
+Assembly features are integrated directly into the print geometry. The frame includes four battery strap slots in the floor and continuous wire-routing paths from motor pods into the electronics bay. This allows a straightforward assembly order: install motors in pods, route motor leads through arm channels, mount the controller board, then secure the battery and sensor harness. Because most interfaces are geometric rather than adhesive, rework is possible without damaging the frame.
+
+\vspace{0.5em}
+
+\textbf{Design for Maintenance (DFMn):}
+Maintenance access is provided by the open top cavity, side-wall windows, and pod-to-arm wire notches. These features allow quick inspection of solder joints, connector seating, and wire wear without full teardown. Electronics can be removed independently from propulsion hardware, and battery straps can be replaced in the field with standard hook-and-loop straps. In case of structural damage, the one-piece architecture supports rapid replacement by reprinting the frame using the same CAD file, preserving dimensional repeatability across repairs.
 
 \subsection{Block Diagrams}
 
