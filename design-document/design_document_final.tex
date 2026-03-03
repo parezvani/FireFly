@@ -294,10 +294,40 @@ A simplified quadcopter dynamics model was used to tune attitude and altitude co
 % ============================================================
 
 \subsection{Conceptualisations}
-[...]
+
+The conceptualization of FireFly establishes the high level structure of the system before detailed design and component selection. FireFly is envisioned as a lightweight, rapidly deployable quadcopter that operates as a mobile environmental sensing node in areas with no existing infrastructure. At this stage, the system is defined in terms of its required capabilities rather than specific hardware.
+
+\vspace{0.5em}
+
+The platform is conceptualized around three core functions: sustained stable flight, reliable environmental sensing, and real time data transmission. The airframe provides mounting points for a modular payload consisting of the temperature, humidity, and smoke sensors. A central flight controller manages propulsion, stabilization, and stability controller communication, while the microcontroller subsystem handles sensor acquisition and mesh network data transport. Power is supplied by a LiPo battery sized to support both propulaion and the onboard electronics for the duration of a pre-fire monitoring mission. 
+
+\vspace{0.5em}
+
+To support use in remote terrain, the communication layer is conceptualized as a decentralized Wi-Fi mesh network rather than a point to point link. This allows each drone to ace as both a sensor playform and a relay, ensuring data can reach the ground station even when terrain blocks direct line of sight. The software model includes a lightweight telemetry server on each node and a centralized logging system at the base station.
+
+\vspace{0.5em}
+
+Overall, the conceptual model defines FireFly as an infrastructure indepenedant quadcopter platform that combines environmental sensing, onboard processing, and long range mesh communication. This provides the foundation for selecting hardware, designing the frame, and implementing the control architecture.
 
 \subsection{Brainstorming}
-[...]
+
+The brainstorming phase explored multiple design directions before converging on the current FireFly configuration. For the frame, several geometries were evaluated, including traditional X and H-style quadcopter layouts. The final frame concept emerged as a hybrid, leaning primarily toward an X-frame for improved stability, balanced motor distribution, and ease of maintenance while still allowing flexible mounting options for sensors and electronics.
+
+\vspace{0.5em}
+
+The sensing strategy originated from studying existing ground-based mesh networks deployed in forests for environmental monitoring. These networks offer valuable data but are geographically limited and expensive to expand. This led to the idea of using a drone as a mobile extension of such networks, particularly in areas where no sensor infrastructure exists. While commercial sensor networks rely on stationary nodes, FireFly would act as a mobile node capable of collecting and relaying data beyond the reach of fixed installations.
+
+\vspace{0.5em}
+
+Several communication methods were explored. Bluetooth Low Energy (BLE) was initially attractive due to built in characteristics support and team familiarity. Wi-Fi was evaluated next and ultimately selected because it integrates cleanly with the controller app, supports higher throughput, and enables a mesh topology through ESP-Now and Wi-Fi mesh extensions. This allowed the team to conceptualize a swarm capable of relaying data across larger distancees where a single radio link would fail.
+
+\vspace{0.5em}
+
+Power and propulsion options were compared through a combination of bench testing and simulation. Different Lipo battery configurations (3-cell vs. 4-cell), motor-propeller pairs, and ESC compatibility with the microcontroller were evaluated. Using tools such as eCalc, the team analyzed thrust to weight ratio, hover current, and projected flight time to determine whether each candidate configuration could sustain flight with the expected payload. These explorations guided the selection of a power system that balances endurance, stability, and the electrical needs of the sensor and communication hardware.
+
+\vspace{0.5em}
+
+The brainstorming process defined the feasible design space and informed the selection of the frame, mobile sensing concept, Wi-Fi/ESP-Now mesh communication, and optimized power system used in the FireFly design.
 
 \subsection{Decision Tables}
 
@@ -387,7 +417,7 @@ The test plan consists of three phases:
 
 \vspace{1em}
 
-\textbf{Christian Li:} [Reflection text here...]
+\textbf{Christian Li:} Looking back on this project, one of the biggest lessons I learned is the importance of starting with a clearly defined need rather than a preconceived solution. We approached the project wanting to build a drone, and only later did we step back and ask why a drone was the right solution for the problem. If we had focused earlier on the lack of fire risk data in remote areas, we could have identified the required characteristics sooner and avoided some of the design and task adjustments we made midway through the quarter. Even so, our team communicated well and adapted quickly. The flexibility helped us stay on track and produce a coherent design. This experience also gave me valuable insight into working as a team, improving how we communicate, distribute work, and learn new tools and environments together.
 
 \vspace{1em}
 
