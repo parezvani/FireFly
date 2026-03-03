@@ -18,6 +18,7 @@
 - **Matin**:
     - Updated our Notion Gantt Chart.
     - Fixed grammar and spelling errors on the design document via Overleaf (LaTeX).
+    - Worked on design document with everyone.
 - **Nick**:
     - text
 - **Parsa**:
