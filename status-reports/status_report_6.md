@@ -16,7 +16,8 @@
 - **Kevin**:
     - text
 - **Matin**:
-    - text
+    - Updated our Notion Gantt Chart.
+    - Fixed grammar and spelling errors on the design document via Overleaf (LaTeX).
 - **Nick**:
     - text
 - **Parsa**:
