@@ -1,13 +1,17 @@
-Instructor Meeting
+# Notes
 
-* Current test is low level  
-* Force the udp to drop packets and reliably test that  
-* Deliberately make the connection bad  
-* What does the drone sensor need to pick up  
-  * Independent tests  
-* Other types of sensors  
-  * Infrared  
-* Can we detect the heat source?  
-* Can we detect where the heat source is?  
-* Check signal from voltage change for testing
+## Instructor Meeting
+- Current testing is too low level.
 
+## Testing Improvements
+- Force UDP packet drops and test reliability.
+- Deliberately degrade the connection to simulate poor conditions.
+- Check signal changes from voltage variation for testing.
+
+## Sensor Requirements
+- Define what the drone sensor needs to detect.
+- Run independent tests.
+- Evaluate other sensor types.
+  - Infrared
+- Determine whether we can detect a heat source.
+- Determine whether we can locate where the heat source is.
