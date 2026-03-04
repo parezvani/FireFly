@@ -3,10 +3,10 @@
 FireFLY is a student-built drone platform centered on the `ESP32-C3-DevKit-RUST-1` for fire risk monitoring in areas without existing sensor coverage.
 
 ## Need
-A rapidly deployable drone that can be launched immediately into areas with zero sensor infrastructure, collecting real-time temperature, humidity, and smoke data during the high-risk window before a fire occurs.
+Remote and high fire-risk areas lack the sensor infrastructure necessary to monitor environmental conditions during the critical pre-fire window, leaving fire response teams without the real-time data needed to act early.
 
 ## Goal
-Prove that a drone can function as a first response environmental monitoring tool by integrating a smoke and temp sensor, transmitting live readings to a ground station, and triggering alerts when fire risk thresholds are crossed.
+Provide fire response teams with real-time temperature, humidity, and smoke readings from high-risk, infrastructure-free terrain by deploying a rapidly mobilized monitoring system that transmits live data to a ground station and alerts operators when fire risk thresholds are crossed.
 
 ## Repository Layout
 - `esp/`: main firmware / embedded development.
