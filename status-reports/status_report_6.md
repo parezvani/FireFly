@@ -2,17 +2,20 @@
 
 ## Achievements from before:
 - Recieved a few parts
-- 
+- Configured a viable test to demonstrate motor movement using a DC motor
 
 ## Setbacks from before:
 - Motor pod sizing mismatch with motor that came in
-- 
+- We did not receive our ESC which prevents us from connecting our brushless motor
 
 ## Who Did What:
 - **Christian**:
     - text
 - **Kenny**:
-    - text
+    - Implemented a test to demonstrate the motor
+    - Test includes speed and direction capabilities
+    - Developed the wiring using a H-bridge and a potentiometer
+    - Worked on design document
 - **Kevin**:
     - text
 - **Matin**:
