@@ -17,7 +17,9 @@
     - Developed the wiring using a H-bridge and a potentiometer
     - Worked on design document
 - **Kevin**:
-    - text
+    - Uploaded this week's meeting notes.
+    - Redesigned high level schematic to not have images, added detail between parts, and overall look.
+    - Added block diagram of schematic to the design document.
 - **Matin**:
     - Updated our Notion Gantt Chart.
     - Fixed grammar and spelling errors on the design document via Overleaf (LaTeX).
