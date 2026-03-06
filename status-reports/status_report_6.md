@@ -27,7 +27,11 @@
     - Fixed grammar and spelling errors on the design document via Overleaf (LaTeX).
     - Worked on design document with everyone.
 - **Nick**:
-    - text
+    - Researched and uploaded notes for drone mesh network
+    - Worked on Design Doc
+        - Added content for Technology and Simulations
+        - Updated parts list
+    - Started research on wiring with Kenny
 - **Parsa**:
     - text
 - **Ryan**:
