@@ -37,7 +37,7 @@
     - Presentation Slides
     - Design Document
 - **Done**:
-    - text
+    - Hardware test for prototype demonstration 
 
 ## ...
 - ...
