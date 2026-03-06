@@ -10,7 +10,9 @@
 
 ## Who Did What:
 - **Christian**:
-    - text
+    - Tested scripts on determining udp packet ports
+    - Learning wireshark
+    - Worked on design document
 - **Kenny**:
     - Implemented a test to demonstrate the motor
     - Test includes speed and direction capabilities
