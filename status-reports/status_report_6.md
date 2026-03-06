@@ -42,6 +42,3 @@
     - Design Document
 - **Done**:
     - Hardware test for prototype demonstration 
-
-## ...
-- ...
