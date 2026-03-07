@@ -26,6 +26,7 @@
     - Updated our Notion Gantt Chart.
     - Fixed grammar and spelling errors on the design document via Overleaf (LaTeX).
     - Worked on design document with everyone.
+    - 3D printed another drone frame.
 - **Nick**:
     - Researched and uploaded notes for drone mesh network
     - Worked on Design Doc
