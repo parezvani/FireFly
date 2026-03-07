@@ -92,4 +92,3 @@ Same board: add I2C sensor reading and log temperature/humidity.
 Two boards: port the ESP‑MESH init/start/send/recv calls and confirm we can send a string between them.
 Many boards: swap the string for alert struct and add forwarding and TTL.
 Root board: add HTTP/HTTPS client to POST received alerts to a local Flask/Express test server.
-

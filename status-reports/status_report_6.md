@@ -40,7 +40,6 @@
 ## To-do, In-progress, Done:
 - **To-do**:
     - Waiting on remaining parts
-    - 
 - **In-progress**:
     - Presentation Slides
     - Design Document
