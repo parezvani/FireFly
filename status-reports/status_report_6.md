@@ -33,7 +33,12 @@
         - Updated parts list
     - Started research on wiring with Kenny
 - **Parsa**:
-    - text
+    - Formatted design document to include all of the requirements
+        - Fixed changes in design
+        - Fixed Need and goal statements
+        - Added appendices
+    - Looked into parts for infared cameras that can be implemented
+    - Researched esp-to-esp communication protocol to settup groundstation network
 - **Ryan**:
     - text
 
