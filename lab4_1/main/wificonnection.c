@@ -20,7 +20,7 @@
 #define WIFI_PASS      "12345678"
 
 #define UDP_PORT       11111
-#define LED_GPIO       2
+#define LED_GPIO       7
 
 static const char *TAG = "esp_drone_demo";
 
