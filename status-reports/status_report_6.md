@@ -41,7 +41,9 @@
     - Looked into parts for infared cameras that can be implemented
     - Researched esp-to-esp communication protocol to settup groundstation network
 - **Ryan**:
-    - text
+    - ordered more parts
+    - got the script to light up 2 udp packets
+    - tried the wireshark
 
 ## To-do, In-progress, Done:
 - **To-do**:
