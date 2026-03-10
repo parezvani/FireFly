@@ -1,7 +1,7 @@
 # Prototype Demonstration Script (Dry Run)
 
 ## Total Time
-- Target length: 4 to 5 minutes
+- Target length: 20 minutes
 - Slide shown for entire demo: `circuit-design/Schematic_Design.png`
 
 ## Speaker 1 - Opening (Need + Goal)
