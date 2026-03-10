@@ -1,9 +1,9 @@
-# Prototype Demonstration Script (Mar. 9 Revision)
+# Prototype Demonstration Script (Mar. 10 Revision)
 
 ## Total Time
 - Target length: 15 minutes
 - Q&A: 5 minutes
-- Main visual for most of the demo: `circuit-design/Schematic_Design.png`
+- Main visual for most of the demo: `circuit-design/Schematic_Design_2.png`
 - Required flow:
   - Need/Goal
   - Design Objectives
@@ -41,20 +41,20 @@ Mentioning personas is important because it explains why our design emphasizes c
 ## Speaker 4 - Testing Plan + Prototype Evidence
 "Our testing plan is to validate one functional part of the high-level design at a time.
 
-For today's prototype, we focus on the communication path. A computer sends a command through a local controller node. That message is transmitted over a peer-to-peer wireless link to a second controller node. The second node responds by blinking an LED.
+For today's prototype, we focus on the communication path. A computer sends a command over USB to the ground-station controller. That message is transmitted over the wireless link to the drone-side controller. The drone-side controller responds by blinking an LED.
 
 That blinking LED is the visible proof in this demo. It shows that a message traveled across the intended link and triggered a physical response on the receiving side.
 
-This is also why we removed the earlier phone or app stage from the presentation. For this version of the prototype, the path is simplified to computer, local controller, wireless link, remote controller, and visible output. That gives us a cleaner and more testable demonstration." 
+This is also why the updated schematic no longer shows the earlier phone or app stage. For this version of the prototype, the path is computer, ground-station controller, wireless link, drone-side controller, and visible output. That gives us a cleaner and more testable demonstration." 
 
 ## Speaker 2 - The Design
 "Using the schematic, we can connect that prototype back to the full design.
 
-On the left side is the power and actuation path: the battery, motor-control hardware, and propulsion components.
-At the center is the onboard controller, which acts as the decision point for sensing, communication, and control.
-On the operator side, the design now routes through a computer, and that computer can also connect to a server for logging and monitoring.
+On the left side is the power and actuation path: the battery, the electronic speed controller, the motors, and the propellers.
+At the center is the drone controller, which acts as the decision point for sensing, communication, and control.
+On the right side is the operator path: a computer connects by USB to a ground-station controller, and the computer can also connect to a server for logging and monitoring.
 
-In the final system, environmental readings would move through that same general path. In today's prototype, we use a command packet and a blinking LED instead of a full flight-and-sensor demonstration, because that isolates the communication architecture and lets us verify it clearly before complete integration." 
+In the final system, environmental readings would move from the sensors into the drone controller, across the wireless link, and back to the ground side for display and storage. In today's prototype, we use a command packet and a blinking LED instead of a full flight-and-sensor demonstration, because that isolates the communication architecture and lets us verify it clearly before complete integration." 
 
 ## Speaker 1 - Close
 "To close, this prototype demonstrates five things.
@@ -70,11 +70,11 @@ Our next step is to extend that validated path into the rest of the system, incl
 ## Presenter Notes
 - Keep the Need and Goal statement strong and memorized.
 - Do not frame the demo around a phone or app.
-- Do not name the controller hardware directly; say `controller node`, `onboard controller`, or `wireless link`.
+- Do not name the board model directly; say `ground-station controller`, `drone controller`, `MCU`, or `wireless link`.
 - Emphasize that this is a prototype test of one functional subsystem, not the full final deployment.
 
 ## Backup One-Liners for Q&A
-- "Why remove the phone/app stage?" -> "We simplified the prototype so we could test the computer-to-controller communication path more clearly and reduce demo risk."
+- "Why remove the phone/app stage?" -> "The revised schematic focuses on the computer, ground-station controller, and drone controller path so we can test the core wireless link more clearly and reduce demo risk."
 - "What does the blinking LED prove?" -> "It proves the remote node received the message and executed the expected action."
-- "What is working today?" -> "The end-to-end communication path and hardware response are working in the current prototype test."
+- "What is working today?" -> "The end-to-end path from computer to ground station, across the wireless link, to the drone-side hardware response is working in the current prototype test."
 - "What are you proving today?" -> "We are proving the communication architecture and the testing approach, not full flight operation."
