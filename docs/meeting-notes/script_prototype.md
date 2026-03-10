@@ -75,6 +75,6 @@ Our next step is to extend that validated path into the rest of the system, incl
 
 ## Backup One-Liners for Q&A
 - "Why remove the phone/app stage?" -> "The revised schematic focuses on the computer, ground-station controller, and drone controller path so we can test the core wireless link more clearly and reduce demo risk."
-- "What does the blinking LED prove?" -> "It proves the remote node received the message and executed the expected action."
+- "What does the blinking LED prove?" -> "It proves the remote node received the message and executed the expected action. As well as setup One to many drones to send out communications commands to"
 - "What is working today?" -> "The end-to-end path from computer to ground station, across the wireless link, to the drone-side hardware response is working in the current prototype test."
 - "What are you proving today?" -> "We are proving the communication architecture and the testing approach, not full flight operation."
