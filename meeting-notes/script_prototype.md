@@ -1,47 +1,80 @@
-# Prototype Demonstration Script (Dry Run)
+# Prototype Demonstration Script (Mar. 9 Revision)
 
 ## Total Time
 - Target length: 15 minutes
-- Slide shown for entire demo: `circuit-design/Schematic_Design.png`
+- Q&A: 5 minutes
+- Main visual for most of the demo: `circuit-design/Schematic_Design.png`
+- Required flow:
+  - Need/Goal
+  - Design Objectives
+  - Personas
+  - Testing Plan
+  - The Design
 
 ## Speaker 1 - Opening (Need + Goal)
-"Hi everyone, we are Team FireFly. Our project addresses one core need: remote and high fire-risk areas often have no fixed sensor infrastructure, so responders do not get enough pre-fire data early enough to act safely and quickly.
+"Hi everyone, we are Team FireFly.
 
-Our goal is to provide real-time temperature, humidity, and smoke readings from those infrastructure-free areas using a rapidly deployable drone platform. During this prototype demonstration, we are showing that the core architecture is feasible: power and propulsion control, onboard processing, and wireless data flow to operators."
+The need we are addressing is that remote and high fire-risk areas often do not have fixed sensor infrastructure during the critical pre-fire window. Because of that, fire response teams can be left without timely environmental data when they need it most.
 
-## Speaker 2 - Schematic Walkthrough (Electrical/Control Path)
-"I will walk through the schematic from left to right.
+Our goal is to provide a rapidly deployable monitoring system that can gather temperature, humidity, and smoke information in infrastructure-free terrain and return that information to operators so they can make earlier and safer decisions.
 
-On the left side, the battery provides system power. That power feeds the ESC, and the ESC controls motor output. In the final configuration, the microcontroller sends control signals to the ESC, and the ESC drives the brushless motors and propellers.
+For this prototype demonstration, we are not claiming the full final system is complete. Instead, we are showing that the core communication and control architecture can be tested in modular pieces and still map directly back to that need and goal." 
 
-In our current prototype test, we demonstrate this control principle using an ESP32 with an H-bridge and DC motor test rig while we wait for the replacement ESC. We can show speed and direction control, which validates our control path logic before full brushless integration.
+## Speaker 2 - Design Objectives
+"Our design objectives are measurable, because we need a way to decide whether the design actually meets expectations.
 
-At the center is the MCU, which is the main decision point. It receives data from sensors and sends control and telemetry data to the rest of the system."
+First, the system needs enough transmission range to operate away from the operator in realistic outdoor conditions.
+Second, the transmission rate needs to be fast enough that commands and environmental readings stay useful.
+Third, battery life needs to support a meaningful monitoring mission, not just a very short bench test.
+Fourth, the system needs to operate across the temperature conditions expected in wildfire monitoring environments.
 
-## Speaker 3 - Mechanical/Design Integration
-"From the mechanical side, our frame is designed so the electronics path shown in this schematic can be assembled cleanly and serviced quickly. The battery, controller, and wiring routes are planned to minimize cable clutter and reduce rework during testing.
+These objectives matter because they turn the project from an idea into something we can test numerically and improve with evidence." 
 
-Motor pod and frame iterations were used to improve fit, internal space, and wire routing access. This lets us safely iterate electrical and software tests now, then move to integrated flight testing once the final motor-control hardware is installed."
+## Speaker 3 - Personas
+"This design is meant for users across a wide experience range.
 
-## Speaker 4 - Software/Data Path + Live Prototype Evidence
-"On the right side of the schematic is the operator and data pipeline.
+One example user is a wildfire operations coordinator who needs a system that is fast to deploy, easy to understand, and reliable under time pressure.
+Another example is a researcher who wants environmental data collected in remote areas and forwarded into a computer-based workflow for logging and analysis.
 
-The MCU exchanges control and telemetry with the phone/app side, and data can be forwarded to a server for storage and monitoring. We have already validated core communication pieces through packet tests and logging workflows, including UDP traffic checks and message visibility during testing.
+Mentioning personas is important because it explains why our design emphasizes clear operation, practical deployment, and a simple data path instead of extra features that do not help the user in the field." 
 
-For sensing, the final architecture uses temperature/humidity plus smoke sensing for wildfire risk monitoring. In the prototype phase, we are validating sensor-read and communication behavior in modular steps so each subsystem is testable before full integration.
+## Speaker 4 - Testing Plan + Prototype Evidence
+"Our testing plan is to validate one functional part of the high-level design at a time.
 
-The top path in the schematic shows future expansion through drone-to-drone or mesh-style communication, so this architecture can scale beyond a single unit when needed."
+For today's prototype, we focus on the communication path. A computer sends a command through a local controller node. That message is transmitted over a peer-to-peer wireless link to a second controller node. The second node responds by blinking an LED.
 
-## Speaker 1 - Close (What This Demo Proves)
-"To close, this dry run demonstrates three things.
+That blinking LED is the visible proof in this demo. It shows that a message traveled across the intended link and triggered a physical response on the receiving side.
 
-First, the architecture is coherent from battery and control logic through actuation and data delivery.
-Second, we have working prototype evidence for motor control behavior and communication behavior, even while final ESC-dependent integration is pending.
-Third, this prototype supports our project objective: infrastructure-independent pre-fire data collection to improve responder awareness and safety.
+This is also why we removed the earlier phone or app stage from the presentation. For this version of the prototype, the path is simplified to computer, local controller, wireless link, remote controller, and visible output. That gives us a cleaner and more testable demonstration." 
 
-Our next step is completing full hardware integration with the incoming parts and running end-to-end tests with the finalized sensor and propulsion stack."
+## Speaker 2 - The Design
+"Using the schematic, we can connect that prototype back to the full design.
+
+On the left side is the power and actuation path: the battery, motor-control hardware, and propulsion components.
+At the center is the onboard controller, which acts as the decision point for sensing, communication, and control.
+On the operator side, the design now routes through a computer, and that computer can also connect to a server for logging and monitoring.
+
+In the final system, environmental readings would move through that same general path. In today's prototype, we use a command packet and a blinking LED instead of a full flight-and-sensor demonstration, because that isolates the communication architecture and lets us verify it clearly before complete integration." 
+
+## Speaker 1 - Close
+"To close, this prototype demonstrates five things.
+
+First, the project is grounded in a clear need and goal.
+Second, the design is being judged against measurable objectives.
+Third, the system is being shaped around real users and real field constraints.
+Fourth, our testing plan is modular and evidence-based.
+Fifth, the prototype result supports the overall design by proving that the communication path can produce a successful hardware response.
+
+Our next step is to extend that validated path into the rest of the system, including integrated sensing, motor control, and broader end-to-end testing." 
+
+## Presenter Notes
+- Keep the Need and Goal statement strong and memorized.
+- Do not frame the demo around a phone or app.
+- Do not name the controller hardware directly; say `controller node`, `onboard controller`, or `wireless link`.
+- Emphasize that this is a prototype test of one functional subsystem, not the full final deployment.
 
 ## Backup One-Liners for Q&A
-- "Why use a DC motor in the demo?" -> "It is a controlled stand-in to validate signal-to-actuation behavior while waiting for the replacement ESC for brushless integration."
-- "What is working today?" -> "Control signaling, motor behavior in the test rig, and communication packet testing are working today."
-- "What is the main risk right now?" -> "Hardware arrival timing for final ESC integration"
+- "Why remove the phone/app stage?" -> "We simplified the prototype so we could test the computer-to-controller communication path more clearly and reduce demo risk."
+- "What does the blinking LED prove?" -> "It proves the remote node received the message and executed the expected action."
+- "What is working today?" -> "The end-to-end communication path and hardware response are working in the current prototype test."
+- "What are you proving today?" -> "We are proving the communication architecture and the testing approach, not full flight operation."
