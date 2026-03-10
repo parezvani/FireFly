@@ -1,31 +1,22 @@
 #include "ESPNowEasy.h"
-#include "esp_log.h"
-#include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
 
 struct Message {
     int counter;
     char text[32];
 };
 
+// TERMINAL A's MAC ADDRESS
+uint8_t drone_mac[] = {0x64, 0xE8, 0x33, 0xDC, 0xA2, 0xDC};
+
 ESPNowEasy<Message> espNow;
-Message dataToSend;
 
-extern "C" void app_main(void)
-{
-    if (!espNow.begin()) {
-        ESP_LOGE(TAG, "ESP-NOW init failed");
-        return;
-    }
-
-    dataToSend = {0, "Hello World!"};
+extern "C" void app_main(void) {
+    espNow.begin(drone_mac); // Pass the address here
+    Message data = {0, "Drone Command"};
 
     while (1) {
-        espNow.send(dataToSend);
-        dataToSend.counter++;
-
-        ESP_LOGI(TAG, "Sent message %d", dataToSend.counter);
-
+        espNow.send(data);
+        printf("Sent: %d\n", data.counter++);
         vTaskDelay(pdMS_TO_TICKS(1000));
     }
 }
