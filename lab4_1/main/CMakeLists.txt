@@ -1,2 +1,5 @@
-idf_component_register(SRCS "wificonnection.c"
+idf_component_register(SRCS 
+                    "ESPNowEasy.cpp"
+                    "ESPNowBroadcast.cpp"
+                    "ESPNowEasy.h"
                        INCLUDE_DIRS ".")
