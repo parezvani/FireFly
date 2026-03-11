@@ -1,29 +1,41 @@
 #include "ESPNowEasy.h"
+#include "esp_adc/adc_oneshot.h"
+#include "hal/adc_types.h"
 
 struct Message {
-    int pot_value; // Sending the raw ADC reading
+    int pot_value; 
 };
 
-// Use the MAC address of your Motor ESP here
-uint8_t motor_esp_mac[] = {0x64, 0xE8, 0x33, 0xDC, 0xA2, 0xDC}; 
+// Target MAC (The Drone's MAC)
+uint8_t drone_mac[] = {0x64, 0xE8, 0x33, 0xDC, 0xA2, 0xDC}; 
 
 ESPNowEasy<Message> espNow;
 
 extern "C" void app_main(void) {
-    espNow.begin(motor_esp_mac);
+    // 1. Start ESP-NOW
+    espNow.begin(drone_mac);
     
-    // Setup ADC (Code from your motor.c)
+    // 2. Setup ADC (v5 style) - Fixed order and initializers
     adc_oneshot_unit_handle_t adc1_handle;
-    adc_oneshot_unit_init_cfg_t init_config1 = { .unit_id = ADC_UNIT_1 };
+    adc_oneshot_unit_init_cfg_t init_config1 = {}; 
+    init_config1.unit_id = ADC_UNIT_1;
+    init_config1.ulp_mode = ADC_ULP_MODE_DISABLE;
     adc_oneshot_new_unit(&init_config1, &adc1_handle);
-    adc_oneshot_chan_cfg_t config = { .bitwidth = ADC_BITWIDTH_12, .atten = ADC_ATTEN_DB_12 };
+
+    adc_oneshot_chan_cfg_t config = {};
+    config.atten = ADC_ATTEN_DB_12;
+    config.bitwidth = ADC_BITWIDTH_12;
     adc_oneshot_config_channel(adc1_handle, ADC_CHANNEL_2, &config);
 
     Message data;
     while (1) {
+        // Read Potentiometer on GPIO 2 (ADC1 Channel 2)
         adc_oneshot_read(adc1_handle, ADC_CHANNEL_2, &data.pot_value);
+        
+        // Send to Drone
         espNow.send(data);
-        printf("Sending Pot Value: %d\n", data.pot_value);
+        printf("TX -> Sending Pot: %d\n", data.pot_value);
+        
         vTaskDelay(pdMS_TO_TICKS(50));
     }
 }
