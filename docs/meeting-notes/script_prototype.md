@@ -62,8 +62,8 @@ In the final system, environmental readings would move from the sensors into the
 First, the project is grounded in a clear need and goal.
 Second, the design is being judged against measurable objectives.
 Third, the system is being shaped around real users and real field constraints.
-Fourth, our testing plan is modular and evidence-based.
-Fifth, the prototype result supports the overall design by proving that the communication path can produce a successful hardware response.
+Fourth, our testing plan is evidence-based.
+Fifth, the prototype result supports the overall design by proving that the communication path can produce a successful response.
 
 Our next step is to extend that validated path into the rest of the system, including integrated sensing, motor control, and broader end-to-end testing." 
 
