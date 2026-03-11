@@ -2,9 +2,10 @@
 #include "driver/gpio.h"
 #include "driver/ledc.h"
 
-#define ENA_PWM_PIN 3
-#define IN1_PIN     4
-#define IN2_PIN     5
+// Use typed gpio_num_t constants instead of plain int macros to match ESP-IDF API
+static const gpio_num_t ENA_PWM_PIN = GPIO_NUM_3;
+static const gpio_num_t IN1_PIN = GPIO_NUM_4;
+static const gpio_num_t IN2_PIN = GPIO_NUM_5;
 
 struct Message {
     int pot_value;
@@ -38,13 +39,24 @@ void handleIncoming(Message& msg) {
 
 extern "C" void app_main(void) {
     // 1. Setup Motor Pins (GPIO 4, 5)
-    gpio_set_direction((gpio_num_t)IN1_PIN, GPIO_MODE_OUTPUT);
-    gpio_set_direction((gpio_num_t)IN2_PIN, GPIO_MODE_OUTPUT);
+    gpio_set_direction(IN1_PIN, GPIO_MODE_OUTPUT);
+    gpio_set_direction(IN2_PIN, GPIO_MODE_OUTPUT);
 
     // 2. Setup PWM (LEDC)
-    ledc_timer_config_t timer = { .speed_mode = LEDC_LOW_SPEED_MODE, .duty_resolution = LEDC_TIMER_12_BIT, .timer_num = LEDC_TIMER_0, .freq_hz = 1000, .clk_cfg = LEDC_AUTO_CLK };
+    ledc_timer_config_t timer = {}; // zero-initialize to avoid missing-field warnings
+    timer.speed_mode = LEDC_LOW_SPEED_MODE;
+    timer.duty_resolution = LEDC_TIMER_12_BIT;
+    timer.timer_num = LEDC_TIMER_0;
+    timer.freq_hz = 1000;
+    timer.clk_cfg = LEDC_AUTO_CLK;
     ledc_timer_config(&timer);
-    ledc_channel_config_t chan = { .gpio_num = ENA_PWM_PIN, .speed_mode = LEDC_LOW_SPEED_MODE, .channel = LEDC_CHANNEL_0, .timer_sel = LEDC_TIMER_0, .duty = 0 };
+
+    ledc_channel_config_t chan = {}; // zero-initialize to avoid missing-field warnings
+    chan.gpio_num = ENA_PWM_PIN;
+    chan.speed_mode = LEDC_LOW_SPEED_MODE;
+    chan.channel = LEDC_CHANNEL_0;
+    chan.timer_sel = LEDC_TIMER_0;
+    chan.duty = 0;
     ledc_channel_config(&chan);
 
     // 3. Start ESP-NOW
