@@ -11,16 +11,24 @@
   - Testing Plan
   - The Design
 
-## Speaker 1 - Opening (Need + Goal)
+## Opening (Need + Goal)
 "Hi everyone, we are Team FireFly.
 
 The need we are addressing is that remote and high fire-risk areas often do not have fixed sensor infrastructure during the critical pre-fire window. Because of that, fire response teams can be left without timely environmental data when they need it most.
 
 Our goal is to provide a rapidly deployable monitoring system that can gather temperature, humidity, and smoke information in infrastructure-free terrain and return that information to operators so they can make earlier and safer decisions.
 
-For this prototype demonstration, we are not claiming the full final system is complete. Instead, we are showing that the core communication and control architecture can be tested in modular pieces and still map directly back to that need and goal." 
+For this prototype demonstration, we are showing that the core communication and control architecture can be tested in modular pieces and still map directly back to that need and goal." 
 
-## Speaker 2 - Design Objectives
+## Personas
+"This design is meant for users across a wide experience range.
+
+One example user is a wildfire operations coordinator who needs a system that is fast to deploy, easy to understand, and reliable under time pressure.
+Another example is a researcher who wants environmental data collected in remote areas and forwarded into a computer-based workflow for logging and analysis.
+
+Mentioning personas is important because it explains why our design emphasizes clear operation, practical deployment, and a simple data path instead of extra features that do not help the user in the field." 
+
+## Design Objectives
 "Our design objectives are measurable, because we need a way to decide whether the design actually meets expectations.
 
 First, the system needs enough transmission range to operate away from the operator in realistic outdoor conditions.
@@ -30,40 +38,30 @@ Fourth, the system needs to operate across the temperature conditions expected i
 
 These objectives matter because they turn the project from an idea into something we can test numerically and improve with evidence." 
 
-## Speaker 3 - Personas
-"This design is meant for users across a wide experience range.
-
-One example user is a wildfire operations coordinator who needs a system that is fast to deploy, easy to understand, and reliable under time pressure.
-Another example is a researcher who wants environmental data collected in remote areas and forwarded into a computer-based workflow for logging and analysis.
-
-Mentioning personas is important because it explains why our design emphasizes clear operation, practical deployment, and a simple data path instead of extra features that do not help the user in the field." 
-
-## Speaker 4 - Testing Plan + Prototype Evidence
-"Our testing plan is to validate one functional part of the high-level design at a time.
-
-For today's prototype, we focus on the communication path. A computer sends a command over USB to the ground-station controller. That message is transmitted over the wireless link to the drone-side controller. The drone-side controller responds by blinking an LED.
-
-That blinking LED is the visible proof in this demo. It shows that a message traveled across the intended link and triggered a physical response on the receiving side.
-
-This is also why the updated schematic no longer shows the earlier phone or app stage. For this version of the prototype, the path is computer, ground-station controller, wireless link, drone-side controller, and visible output. That gives us a cleaner and more testable demonstration." 
-
-## Speaker 2 - The Design
+## The Design
 "Using the schematic, we can connect that prototype back to the full design.
 
 On the left side is the power and actuation path: the battery, the electronic speed controller, the motors, and the propellers.
-At the center is the drone controller, which acts as the decision point for sensing, communication, and control.
+At the center is the controller (MCU), which acts as the decision point for sensing, communication, and control.
 On the right side is the operator path: a computer connects by USB to a ground-station controller, and the computer can also connect to a server for logging and monitoring.
 
-In the final system, environmental readings would move from the sensors into the drone controller, across the wireless link, and back to the ground side for display and storage. In today's prototype, we use a command packet and a blinking LED instead of a full flight-and-sensor demonstration, because that isolates the communication architecture and lets us verify it clearly before complete integration." 
+In the final system, environmental readings would move from the sensors into the drone controller, across the wireless link, and back to the ground side for display and storage. In today's prototype, we use a command packet from a microcontroller and another microcontroller to control a motor." 
 
-## Speaker 1 - Close
+## Testing Plan + Prototype Evidence
+"Our testing plan is to validate one functional part of the high-level design at a time.
+
+For today's prototype, we focus on the communication path. A computer sends a counter over USB to the ground-station controller. That message is transmitted over the wireless link to the controller. The controller responds by updating a counter received .
+
+That Counter is the visible proof in this demo. It shows that a message traveled across the intended link and triggered a response on the receiving side.
+
+## Close
 "To close, this prototype demonstrates five things.
 
 First, the project is grounded in a clear need and goal.
 Second, the design is being judged against measurable objectives.
 Third, the system is being shaped around real users and real field constraints.
-Fourth, our testing plan is modular and evidence-based.
-Fifth, the prototype result supports the overall design by proving that the communication path can produce a successful hardware response.
+Fourth, our testing plan is evidence-based.
+Fifth, the prototype result supports the overall design by proving that the communication path can produce a successful response.
 
 Our next step is to extend that validated path into the rest of the system, including integrated sensing, motor control, and broader end-to-end testing." 
 
