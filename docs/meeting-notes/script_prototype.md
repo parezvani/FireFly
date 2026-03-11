@@ -41,11 +41,11 @@ Mentioning personas is important because it explains why our design emphasizes c
 ## Speaker 4 - Testing Plan + Prototype Evidence
 "Our testing plan is to validate one functional part of the high-level design at a time.
 
-For today's prototype, we focus on the communication path. A computer sends a command over USB to the ground-station controller. That message is transmitted over the wireless link to the drone-side controller. The drone-side controller responds by blinking an LED.
+For today's prototype, we focus on the communication path. A computer sends a counter over USB to the ground-station controller. That message is transmitted over the wireless link to the drone-side controller. The drone-side controller responds by updating a counter received .
 
-That blinking LED is the visible proof in this demo. It shows that a message traveled across the intended link and triggered a physical response on the receiving side.
+That Counter is the visible proof in this demo. It shows that a message traveled across the intended link and triggered a response on the receiving side.
 
-This is also why the updated schematic no longer shows the earlier phone or app stage. For this version of the prototype, the path is computer, ground-station controller, wireless link, drone-side controller, and visible output. That gives us a cleaner and more testable demonstration." 
+This is also why the updated schematic no longer shows the earlier phone or app stage, it was unstable communication link and not much range. For this version of the prototype, we have a ground-station controller, wireless link, drone-side controller, and visible output. That gives us a cleaner and faster communication." 
 
 ## Speaker 2 - The Design
 "Using the schematic, we can connect that prototype back to the full design.
