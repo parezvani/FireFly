@@ -18,7 +18,7 @@ The need we are addressing is that remote and high fire-risk areas often do not 
 
 Our goal is to provide a rapidly deployable monitoring system that can gather temperature, humidity, and smoke information in infrastructure-free terrain and return that information to operators so they can make earlier and safer decisions.
 
-For this prototype demonstration, we are not claiming the full final system is complete. Instead, we are showing that the core communication and control architecture can be tested in modular pieces and still map directly back to that need and goal." 
+For this prototype demonstration. Instead, we are showing that the core communication and control architecture can be tested in modular pieces and still map directly back to that need and goal." 
 
 ## Design Objectives
 "Our design objectives are measurable, because we need a way to decide whether the design actually meets expectations.
