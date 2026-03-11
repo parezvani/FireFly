@@ -49,7 +49,7 @@ That Counter is the visible proof in this demo. It shows that a message traveled
 "Using the schematic, we can connect that prototype back to the full design.
 
 On the left side is the power and actuation path: the battery, the electronic speed controller, the motors, and the propellers.
-At the center is the drone controller, which acts as the decision point for sensing, communication, and control.
+At the center is the controller (MCU), which acts as the decision point for sensing, communication, and control.
 On the right side is the operator path: a computer connects by USB to a ground-station controller, and the computer can also connect to a server for logging and monitoring.
 
 In the final system, environmental readings would move from the sensors into the drone controller, across the wireless link, and back to the ground side for display and storage. In today's prototype, we use a command packet from a microcontroller and another microcontroller to control a motor." 
