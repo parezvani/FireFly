@@ -45,8 +45,6 @@ For today's prototype, we focus on the communication path. A computer sends a co
 
 That Counter is the visible proof in this demo. It shows that a message traveled across the intended link and triggered a response on the receiving side.
 
-This is also why the updated schematic no longer shows the earlier phone or app stage, it was unstable communication link and not much range. For this version of the prototype, we have a ground-station controller, wireless link, drone-side controller, and visible output. That gives us a cleaner and faster communication." 
-
 ## The Design
 "Using the schematic, we can connect that prototype back to the full design.
 
