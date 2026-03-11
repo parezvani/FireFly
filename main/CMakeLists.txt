@@ -1,3 +1,3 @@
-idf_component_register(SRCS "scripts/ESPNowBroadcast.cpp" "scripts/ESPNowEasy.cpp"
+idf_component_register(SRCS "scripts/RemoteSender.cpp" "scripts/ESPNowEasy.cpp"
                     INCLUDE_DIRS "scripts")
                     
