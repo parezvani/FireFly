@@ -20,6 +20,14 @@ Our goal is to provide a rapidly deployable monitoring system that can gather te
 
 For this prototype demonstration, we are showing that the core communication and control architecture can be tested in modular pieces and still map directly back to that need and goal." 
 
+## Personas
+"This design is meant for users across a wide experience range.
+
+One example user is a wildfire operations coordinator who needs a system that is fast to deploy, easy to understand, and reliable under time pressure.
+Another example is a researcher who wants environmental data collected in remote areas and forwarded into a computer-based workflow for logging and analysis.
+
+Mentioning personas is important because it explains why our design emphasizes clear operation, practical deployment, and a simple data path instead of extra features that do not help the user in the field." 
+
 ## Design Objectives
 "Our design objectives are measurable, because we need a way to decide whether the design actually meets expectations.
 
@@ -30,21 +38,6 @@ Fourth, the system needs to operate across the temperature conditions expected i
 
 These objectives matter because they turn the project from an idea into something we can test numerically and improve with evidence." 
 
-## Personas
-"This design is meant for users across a wide experience range.
-
-One example user is a wildfire operations coordinator who needs a system that is fast to deploy, easy to understand, and reliable under time pressure.
-Another example is a researcher who wants environmental data collected in remote areas and forwarded into a computer-based workflow for logging and analysis.
-
-Mentioning personas is important because it explains why our design emphasizes clear operation, practical deployment, and a simple data path instead of extra features that do not help the user in the field." 
-
-## Testing Plan + Prototype Evidence
-"Our testing plan is to validate one functional part of the high-level design at a time.
-
-For today's prototype, we focus on the communication path. A computer sends a counter over USB to the ground-station controller. That message is transmitted over the wireless link to the controller. The controller responds by updating a counter received .
-
-That Counter is the visible proof in this demo. It shows that a message traveled across the intended link and triggered a response on the receiving side.
-
 ## The Design
 "Using the schematic, we can connect that prototype back to the full design.
 
@@ -53,6 +46,13 @@ At the center is the controller (MCU), which acts as the decision point for sens
 On the right side is the operator path: a computer connects by USB to a ground-station controller, and the computer can also connect to a server for logging and monitoring.
 
 In the final system, environmental readings would move from the sensors into the drone controller, across the wireless link, and back to the ground side for display and storage. In today's prototype, we use a command packet from a microcontroller and another microcontroller to control a motor." 
+
+## Testing Plan + Prototype Evidence
+"Our testing plan is to validate one functional part of the high-level design at a time.
+
+For today's prototype, we focus on the communication path. A computer sends a counter over USB to the ground-station controller. That message is transmitted over the wireless link to the controller. The controller responds by updating a counter received .
+
+That Counter is the visible proof in this demo. It shows that a message traveled across the intended link and triggered a response on the receiving side.
 
 ## Close
 "To close, this prototype demonstrates five things.
