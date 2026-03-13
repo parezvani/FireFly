@@ -6,7 +6,7 @@
 \usepackage{makecell}
 \usepackage{float}
 \usepackage{caption}
-\usepackage{wrapfig} 
+\usepackage{wrapfig}
 
 \titleformat{\section}
     {\normalfont\bfseries}
@@ -55,17 +55,14 @@
 \vspace{1in}
 
 \begin{abstract}
-This document explains how to design, build, and operate the FireFly FireWatch Drone.
+This document presents the design and proof-of-concept for FireFly, a rapidly deployable environmental monitoring drone for wildfire detection in infrastructure-free terrain.
 \end{abstract}
-
-\begin{IEEEkeywords}
-none
-\end{IEEEkeywords}
 
 \newpage
 
 % ============================================================
 \section*{Executive Summary}
+\addcontentsline{toc}{section}{Executive Summary}
 % ============================================================
 
 FireFly is a rapidly deployable quadcopter designed for first-response
@@ -76,17 +73,12 @@ fire risk thresholds are crossed.
 
 \vspace{0.5em}
 
-The design centers on a 3D-printed X-frame carrying an ESP32-C3
-microcontroller, BME280 temperature and humidity sensor, and MQ-2 smoke
-detector. A flight controller manages propulsion and stabilization while the
-ESP32-C3 handles sensor acquisition and ESP-NOW transmission to a ground
-receiver. A 3S LiPo battery powers both propulsion and electronics for the
-duration of a monitoring mission.
+The design centers on a 3D-printed X-frame carrying a dedicated onboard microcontroller, temperature and humidity sensor, and smoke detector. A flight controller manages propulsion and stabilization while the onboard microcontroller handles sensor acquisition and wireless transmission to a ground receiver. A 3S LiPo battery powers both propulsion and electronics for the duration of a monitoring mission.
 
 \vspace{0.5em}
 
-Validation consists of bench testing individual modules power, propulsion,
-sensors, and communications, followed by tethered and open-field flight
+Validation consists of bench testing individual modules (power, propulsion,
+sensors, and communications) followed by tethered and open-field flight
 testing for stable hover, data link verification, and threshold-based smoke
 and temperature detection. The goal is to demonstrate that FireFly can serve
 as a practical proof-of-concept for infrastructure-independent wildfire
@@ -102,7 +94,7 @@ This document contains all the information needed to design and use the FireFly 
 
 \vspace{1em}
 
-Why is collecting data during a pre-fire window important? A pre-fire window---the period before an incident occurs---is critical because it provides time-sensitive information that improves responder safety, reduces property damage, and enables faster, more effective emergency response. Data on vegetation conditions, topography, temperature, humidity, and smoke concentration helps predict fire behavior, identify high-risk areas, and support mitigation actions such as controlled burns or targeted thinning operations. Without this information, emergency crews arrive with incomplete situational awareness and must gather critical details in real time under dangerous conditions.
+Why is collecting data during a pre-fire window important? A pre-fire window, the period before an incident occurs, is critical because it provides time-sensitive information that improves responder safety, reduces property damage, and enables faster, more effective emergency response. Data on vegetation conditions, topography, temperature, humidity, and smoke concentration helps predict fire behavior, identify high-risk areas, and support mitigation actions such as controlled burns or targeted thinning operations. Without this information, emergency crews arrive with incomplete situational awareness and must gather critical details in real time under dangerous conditions.
 
 \vspace{1em}
 
@@ -116,7 +108,7 @@ FireFly addresses this gap directly. By deploying a sensor-equipped quadcopter i
 Remote and high fire-risk areas lack the sensor infrastructure necessary to monitor environmental conditions during the critical pre-fire window, leaving fire response teams without the real-time data needed to act early.
 
 \subsection{Goal Statement}
-Provide fire response teams with real-time temperature, humidity, and smoke readings from high risk, infrastructure free terrain by deploying a rapidly mobilized monitoring system that transmits real time data to a ground station and alerts operators when fire risk thresholds are crossed.
+Provide fire response teams with real-time temperature, humidity, and smoke readings from high-risk, infrastructure-free terrain by deploying a rapidly mobilized monitoring system that transmits real-time data to a ground station and alerts operators when fire risk thresholds are crossed.
 
 \subsection{Personas}
 Individuals with experience levels ranging from novice to expert in fire monitoring and environmental fieldwork.
@@ -129,8 +121,8 @@ Individuals with experience levels ranging from novice to expert in fire monitor
 \textbf{Marcus} \\
 \underline{\textit{Role:}} Wildfire Operations Coordinator (professional first responder) \\
 \underline{\textit{Background / Context:}} Works with a state forestry division managing prescribed burns and post-fire monitoring. Needs something fast that he can hand off to field crews without extensive training. \\
-\textit{Goals:} Rapid deployment of sensor-equipped drones into areas too dangerous or inaccessible for personnel during the high-risk pre-fire window. Wants real-time smoke and temperature data without putting people in harm's way. \\
-\underline{\textit{Behaviors:}} Works under time pressure, values reliability over features, and coordinates with multiple agencies. Skeptical of unproven technology. Practical --- if it breaks in the field, it needs to be fixable on-site with minimal tools. \\
+\underline{\textit{Goals:}} Rapid deployment of sensor-equipped drones into areas too dangerous or inaccessible for personnel during the high-risk pre-fire window. Wants real-time smoke and temperature data without putting people in harm's way. \\
+\underline{\textit{Behaviors:}} Works under time pressure, values reliability over features, and coordinates with multiple agencies. Skeptical of unproven technology. Practical: if it breaks in the field, it needs to be fixable on-site with minimal tools. \\
 \underline{\textit{Expectations:}} A rugged, simple-to-operate platform that can be deployed at a moment's notice. Wants clear threshold alerts he can act on immediately.
 
 \vspace{1em}
@@ -171,22 +163,22 @@ Individuals with experience levels ranging from novice to expert in fire monitor
 \underline{\textit{Background / Context:}} Responsible for fire prevention, monitoring, and response across millions of acres of national forest, much of it roadless wilderness with no existing sensor infrastructure. Currently relies on satellite imagery, fire lookout towers, and aerial patrols, all of which have coverage gaps and response delays during the highest-risk windows. \\
 \underline{\textit{Goals:}} Evaluate FireFly as a rapidly deployable supplement to existing monitoring systems for areas where infrastructure cannot operate. Interested in whether the platform can reliably trigger alerts before a fire establishes. \\
 \underline{\textit{Behaviors:}} Evaluates tools based on operational reliability and ease of use for non-specialist field crews. Requires demonstrated performance data before recommending adoption. \\
-\underline{\textit{Expectations:}} A working prototype that proves the core concept, zero infrastructure deployment, live sensor transmission, and threshold based alerting with documentation clear enough for field personnel to operate without engineering support.
+\underline{\textit{Expectations:}} A working prototype that proves the core concept: zero-infrastructure deployment, live sensor transmission, and threshold-based alerting, with documentation clear enough for field personnel to operate without engineering support.
 
 \subsection{Existing Research}
-Current wildfire detection relies on satellite imagery, fixed camera networks, 
-and manned aircraft. Satellites cannot reliably detect fires smaller than 
-approximately 18 square kilometers. Fixed towers like AlertCalifornia's 
-camera network are constrained by line of sight, leaving roadless terrain 
-uncovered. UAV-based systems have shown promise, with UAV--IoT networks 
-detecting fires as small as 2.5 square kilometers at over 99 percent accuracy, 
-but most depend on pre-deployed ground sensors or persistent network 
+Current wildfire detection relies on satellite imagery, fixed camera networks,
+and manned aircraft. Satellites cannot reliably detect fires smaller than
+approximately 18 square kilometers. Fixed towers like AlertCalifornia's
+camera network are constrained by line of sight, leaving roadless terrain
+uncovered. UAV-based systems have shown promise, with UAV--IoT networks
+detecting fires as small as 2.5 square kilometers at over 99 percent accuracy,
+but most depend on pre-deployed ground sensors or persistent network
 infrastructure that does not exist in remote areas.
 
 \vspace{0.5em}
 
-FireFly addresses this gap by providing a self-contained, rapidly deployable 
-platform that requires no pre-existing infrastructure to deliver real-time 
+FireFly addresses this gap by providing a self-contained, rapidly deployable
+platform that requires no pre-existing infrastructure to deliver real-time
 environmental data and threshold-based fire risk alerts.
 
 \subsection{Sustainability Statement}
@@ -211,7 +203,12 @@ We recognize that Lithium-Polymer (LiPo) batteries pose a chemical risk if dispo
 \vspace{1em}
 
 \textbf{Social and Safety Impact:}
-Sustainability includes the protection of human capital. FireFly enhances the safety of first responders by providing situational awareness in hazardous terrains without risking human life. By creating a rapidly deployable tool, we democratize access to advanced fire-monitoring technology for smaller forestry divisions and academic researchers who may lack the budget for satellite-based or manned aerial surveillance.
+Sustainability includes the protection of human capital. FireFly enhances the safety of first responders by providing situational awareness in hazardous terrains without risking human life. By creating a rapidly deployable tool, we extend access to advanced fire-monitoring capability to smaller forestry divisions and academic researchers who operate outside the reach of satellite-based or manned aerial surveillance programs.
+
+\vspace{1em}
+
+\textbf{Ethics Statement:}
+As engineers, we recognize that our work has a direct impact on public safety and the environment. We are committed to upholding the highest standards of honesty, transparency, and responsibility throughout the design and development of FireFly. Our system is intended solely to support fire prevention and responder safety. We will not misrepresent the capabilities of the prototype, will clearly communicate the limitations of sensor accuracy and flight duration, and will ensure that any data collected during testing is handled responsibly. We adhere to the NSPE Code of Ethics, holding paramount the safety, health, and welfare of the public in all design decisions.
 
 \newpage
 
@@ -260,8 +257,8 @@ Maintenance access is provided by the open top cavity, side-wall windows, and po
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=1.0\textwidth]{images/Schematic_Design_2.png}
-    \caption{A high level schematic of our drone.}
+    \includegraphics[width=1.0\textwidth]{images/Final_Schematic.png}
+    \caption{A high-level schematic of the FireFly system.}
     \label{fig:schematic_design}
 \end{figure}
 
@@ -274,8 +271,6 @@ Maintenance access is provided by the open top cavity, side-wall windows, and po
     \label{fig:circuit_diagram}
 \end{figure}
 
-\vspace{1in}
-
 \subsection{State Transition Diagrams}
 
 \begin{figure}[H]
@@ -287,19 +282,31 @@ Maintenance access is provided by the open top cavity, side-wall windows, and po
 
 \subsection{Technology (Languages, Hardware, etc.)}
 
-FireFly uses a two-node ESP32-C3 architecture connected via the ESP-NOW protocol. The drone carries an ESP32-C3 microcontroller that reads sensor data from a BME280 (temperature and humidity) and an MQ-2 (smoke detection), packages the readings into a structured telemetry packet, and transmits it wirelessly to a ground receiver using ESP-NOW. ESP-NOW is a connectionless peer-to-peer protocol operating on the 2.4GHz band with a range of approximately 400 meters line-of-sight and latency under 10ms, making it well suited for remote wildfire monitoring scenarios where reliable low-latency telemetry is critical.
+FireFly uses a two-node wireless architecture connected via a low-latency peer-to-peer radio protocol. The drone carries an onboard microcontroller that reads sensor data from a temperature and humidity sensor and a smoke detector, packages the readings into a structured telemetry packet, and transmits it wirelessly to a ground receiver. The communication link operates on the 2.4GHz band with a range of approximately 400 meters line-of-sight and latency under 10ms, making it well suited for remote wildfire monitoring scenarios where reliable low-latency telemetry is critical.
 
 \vspace{0.5em}
 
-The ground station consists of a second ESP32-C3 that registers as an ESP-NOW receiver, unpacks the incoming telemetry struct, and forwards the data as a JSON stream over USB serial to a host machine. The host machine runs a Python Flask server that reads the serial stream and exposes a local HTTP endpoint, which a browser-based dashboard polls at one-second intervals to display live sensor readings. Firmware on both ESP32-C3 devices is written in C using the ESP-IDF framework, with the ground station dashboard implemented in Python and JavaScript.
+The ground station consists of a second microcontroller that acts as a dedicated receiver, unpacks the incoming telemetry data, and forwards it as a JSON stream over USB serial to a host machine. The host machine runs a Python Flask server that reads the serial stream and exposes a local HTTP endpoint, which a browser-based dashboard polls at one-second intervals to display live sensor readings. Firmware on both microcontrollers is written in C, with the ground station dashboard implemented in Python and JavaScript.
 
 \subsection{Simulations}
 
-Before building and flying, we used simulation tools to verify that the FireFly configuration can sustain flight, carry its sensor payload, and meet the core mission requirement of delivering real-time environmental data during the pre-fire window. An online multicopter calculator (eCalc xcopterCalc) was used to evaluate combinations of frame size, motors, propellers, and battery against thrust-to-weight ratio, hover throttle, current draw, and expected flight time under sensor payload assumptions. This confirmed that the selected hardware provides sufficient thrust margin to carry the BME280 temperature/humidity sensor and MQ-2 smoke detector while maintaining acceptable hover efficiency and a flight time long enough to collect and transmit meaningful readings to the ground station.
+Before building and flying, we used simulation tools to verify that the FireFly configuration can sustain flight, carry its sensor payload, and meet the core mission requirement of delivering real-time environmental data during the pre-fire window. An online multicopter calculator (eCalc xcopterCalc) was used to evaluate combinations of frame size, motors, propellers, and battery against thrust-to-weight ratio, hover throttle, current draw, and expected flight time under sensor payload assumptions. This confirmed that the selected hardware provides sufficient thrust margin to carry the temperature/humidity sensor and smoke detector while maintaining acceptable hover efficiency and a flight time long enough to collect and transmit meaningful readings to the ground station.
 
 \vspace{0.5em}
 
-A simplified quadcopter dynamics model was used to tune attitude and altitude control parameters, verifying that the platform can hold a stable position over a monitoring area --- a prerequisite for consistent sensor sampling. Research on quadcopter modeling confirms that such simulations can predict controller behavior and reduce the number of risky test flights needed to achieve stable flight. Together, these simulations provide evidence that FireFly can meet its need statement requirements: reaching areas with zero sensor infrastructure and sustaining flight long enough to collect and transmit temperature, humidity, and smoke data before committing to full implementation and field testing.
+A simplified quadcopter dynamics model was used to tune attitude and altitude control parameters, verifying that the platform can hold a stable position over a monitoring area, a prerequisite for consistent sensor sampling. Research on quadcopter modeling confirms that such simulations can predict controller behavior and reduce the number of risky test flights needed to achieve stable flight. Together, these simulations provide evidence that FireFly can meet its need statement requirements: reaching areas with zero sensor infrastructure and sustaining flight long enough to collect and transmit temperature, humidity, and smoke data before committing to full implementation and field testing.
+
+\newpage
+
+% ============================================================
+\section{Evaluation}
+% ============================================================
+
+\subsection{Functional Prototype}
+As of the initial submission, FireFly's functional prototype is currently under assembly. Core components, including the onboard microcontrollers, temperature and humidity sensor, and smoke detector, have been sourced and bench-tested for communication and sensor output. A prototype circuitry system using an H-Bridge in place of the ESC and a DC brushed motor in place of the brushless motor was assembled to validate the wireless communication link between the ground-side and drone-side microcontrollers while awaiting final parts. Full integration with the flight stack and ground station dashboard is in progress. Photographs and detailed performance data will be included in the final Spring Quarter submission.
+
+\subsection{Testing}
+Initial bench testing has validated point-to-point wireless communication between the drone-side and ground-side microcontrollers, confirmed sensor readout from the temperature/humidity and smoke sensors, and verified JSON telemetry forwarding over USB serial to the Flask dashboard. Full tethered and open-field flight testing with threshold-based alert verification is planned for the prototype phase. Detailed test procedures and results are documented in Appendix 3.
 
 \newpage
 
@@ -322,10 +329,6 @@ A simplified quadcopter dynamics model was used to tune attitude and altitude co
         \hline
         Propeller: Gemfan Hurricane 2009-3 Tri-Blade (Set of 4) & Pyrodrone & 1 \\
         \hline
-        Caddx Ant Lite Analog Camera (FPV Cycle Edition) & CaddxFPV & 1 \\
-        \hline
-        TFMini-S Micro LiDAR Module & SparkFun & 1 \\
-        \hline
         HAKRC 20A 4-in-1 \verb|3-6S BLHeli_32| 5V 3A BEC DShot1200 Mini ESC & Alibaba & 1 \\
         \hline
         Perforated Circuit Board & Adafruit & 2 \\
@@ -337,7 +340,7 @@ A simplified quadcopter dynamics model was used to tune attitude and altitude co
         Female Header Pins 2x10 & Mikroe & 2 \\
         \hline
     \end{tabular}
-    \caption{Itemized Budget}
+    \caption{Itemized Parts List}
     \label{tab:budget}
 \end{table}
 
@@ -349,77 +352,132 @@ A simplified quadcopter dynamics model was used to tune attitude and altitude co
 
 \subsection{Conceptualisations}
 
-FireFly is a lightweight quadcopter designed to collect and transmit 
-environmental sensor data in remote areas with no existing infrastructure. 
-The system is built around three functions: stable flight, environmental 
+FireFly is a lightweight quadcopter designed to collect and transmit
+environmental sensor data in remote areas with no existing infrastructure.
+The system is built around three functions: stable flight, environmental
 sensing, and real-time data transmission.
 
 \vspace{0.5em}
 
-The drone carries an ESP32-C3 microcontroller paired with a 
-temperature and humidity sensor and an MQ-2 smoke detector. A flight 
-controller manages propulsion and stabilization while the ESP32-C3 handles 
-sensor acquisition and wireless transmission. A LiPo battery powers both 
-propulsion and electronics for the duration of a monitoring mission.
+The drone carries an onboard microcontroller paired with a temperature and humidity sensor and a smoke detector. A flight controller manages propulsion and stabilization while the onboard microcontroller handles sensor acquisition and wireless transmission. A LiPo battery powers both propulsion and electronics for the duration of a monitoring mission.
 
 \vspace{0.5em}
 
-Data is transmitted via ESP-NOW to a ground receiver ESP32-C3, which 
-forwards readings over USB serial to a host machine running a Python Flask 
-dashboard displaying live sensor data and threshold alerts.
+Data is transmitted wirelessly to a ground receiver microcontroller, which forwards readings over USB serial to a host machine running a Python Flask dashboard displaying live sensor data and threshold alerts.
 
 \subsection{Brainstorming}
-Several frame geometries were evaluated including X and H-style quadcopter 
-layouts. An X-frame was selected for its balanced motor distribution, 
+Several frame geometries were evaluated including X and H-style quadcopter
+layouts. An X-frame was selected for its balanced motor distribution,
 stability, and ease of sensor mounting.
 
 \vspace{0.5em}
 
-The sensing approach was inspired by existing ground-based forest sensor 
-networks, which are geographically limited and costly to expand. FireFly was 
-conceived as a mobile alternative a drone that could collect the same 
-environmental data in areas where fixed infrastructure does not exist.
+The sensing approach was inspired by existing ground-based forest sensor
+networks, which are geographically limited and difficult to scale into remote
+terrain. FireFly was conceived as a mobile alternative: a drone that could
+collect the same environmental data in areas where fixed infrastructure does
+not exist.
 
 \vspace{0.5em}
 
-For communication, BLE and WiFi were both evaluated. ESP-NOW was ultimately 
-selected for its simplicity, low latency, and sufficient range for a 
-point-to-point link between the drone and ground receiver without the 
-overhead of a full WiFi stack.
+For communication, Bluetooth Low Energy and Wi-Fi were both evaluated. A connectionless peer-to-peer wireless protocol was ultimately selected for its simplicity, low latency, and sufficient range for a point-to-point link between the drone and ground receiver without the overhead of a full Wi-Fi stack.
 
 \vspace{0.5em}
 
-Power and propulsion options were compared using eCalc to evaluate 
-thrust-to-weight ratio, hover current, and projected flight time across 
-different motor, propeller, and LiPo configurations. This guided selection 
-of a 3S LiPo and motor pairing that balances flight endurance with the 
+Power and propulsion options were compared using eCalc to evaluate
+thrust-to-weight ratio, hover current, and projected flight time across
+different motor, propeller, and LiPo configurations. This guided selection
+of a 3S LiPo and motor pairing that balances flight endurance with the
 electrical load of the sensor and communication hardware.
 
 \subsection{Decision Tables}
 
+The following decision tables evaluate key design alternatives across weighted criteria. Scores are rated 1--5 per criterion, multiplied by the criterion weight, and summed to produce a weighted total.
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+\textbf{Criterion} & \textbf{Weight} & \textbf{X-Frame} & \textbf{H-Frame} & \textbf{+ Frame} \\
+\hline
+Stability & 25\% & 5 & 3 & 4 \\
+\hline
+Sensor Mounting & 20\% & 5 & 4 & 3 \\
+\hline
+Ease of Assembly & 20\% & 4 & 4 & 3 \\
+\hline
+Printability & 20\% & 4 & 3 & 5 \\
+\hline
+Repairability & 15\% & 4 & 5 & 3 \\
+\hline
+\textbf{Weighted Total} & & \textbf{4.45} & \textbf{3.75} & \textbf{3.65} \\
+\hline
+\end{tabular}
+\caption{Frame Geometry Decision Table}
+\end{table}
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+\textbf{Criterion} & \textbf{Weight} & \textbf{Peer-to-Peer Wireless} & \textbf{Wi-Fi} & \textbf{BLE} \\
+\hline
+Latency & 30\% & 5 & 3 & 4 \\
+\hline
+Range & 25\% & 5 & 4 & 2 \\
+\hline
+Infrastructure Required & 25\% & 5 & 2 & 4 \\
+\hline
+Implementation Complexity & 20\% & 4 & 3 & 4 \\
+\hline
+\textbf{Weighted Total} & & \textbf{4.80} & \textbf{3.00} & \textbf{3.50} \\
+\hline
+\end{tabular}
+\caption{Communication Protocol Decision Table}
+\end{table}
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{|l|c|c|c|}
+\hline
+\textbf{Criterion} & \textbf{Weight} & \textbf{PLA} & \textbf{Carbon Fiber PLA} \\
+\hline
+Weight & 30\% & 4 & 5 \\
+\hline
+Printability & 25\% & 5 & 3 \\
+\hline
+Structural Rigidity & 25\% & 3 & 5 \\
+\hline
+Repairability & 20\% & 5 & 3 \\
+\hline
+\textbf{Weighted Total} & & \textbf{4.20} & \textbf{4.00} \\
+\hline
+\end{tabular}
+\caption{Frame Material Decision Table}
+\end{table}
 
 \subsection{Morphological Charts}
 The following combinations were explored for the primary subsystems:
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
-    \includegraphics[width=0.5\linewidth]{images/morphological.png}
+    \includegraphics[width=0.5\linewidth, height=0.45\textheight]{images/morphological.png}
     \caption{Morphological analysis chart outlining potential components of FireFly}
-    \label{fig:placeholder}
+    \label{fig:morphological}
 \end{figure}
-\begin{itemize}
-    \item \textbf{Frame:} ...
-    \item \textbf{Telemetry:} ...
-\end{itemize}
 
 \newpage
+
 % ============================================================
 \section{Appendix 2 - Planning}
 % ============================================================
+
 \subsection{Basic Plan / Gantt Chart}
-[...]
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
-    \includegraphics[width=1\linewidth]{images/Gantt_Chart_v2.png}
+    \includegraphics[width=1\linewidth, height=0.50\textheight, keepaspectratio]{images/Gantt_Chart_v2.png}
     \caption{Gantt Chart}
     \label{fig:gantt_chart}
 \end{figure}
@@ -451,7 +509,12 @@ The following combinations were explored for the primary subsystems:
 \end{table}
 
 \subsection{Collaboration}
-[Collaboration ( did you use tools beyond your repository? how did you assign tasks? )]
+\begin{itemize}
+    \item \textbf{Github:} CI/CD Tool
+    \item \textbf{Discord:} Communication and meetings
+    \item \textbf{Notion:} Gantt Chart
+    \item \textbf{Trello:} Kanban board for task tracking
+\end{itemize}
 
 \newpage
 
@@ -459,21 +522,19 @@ The following combinations were explored for the primary subsystems:
 \section{Appendix 3 - Test Plan \& Results}
 % ============================================================
 
-%Appendix 3 - Test Plan & Results
-%You'll have summarised this in the body/evaluation section, but here's were you provide all the detail
-
 The test plan consists of three phases:
 \begin{enumerate}
     \item \textbf{Bench Testing:}
-    
-    We began by creating a prototype circuitry system that utilizes an H-Bridge that is being used in substitution to the Electronic Speed Controller  along with a DC brushed motor compared to the designed DC brushless motor. This system was used to test the wireless communication between our grounded micro-controller to the micro-controller that will be in the air along with the drone. Thus will allow us to develop our system of communication, while waiting for parts that we ordered for our design, between the drone to receive the information required to test the environment.   
-    \item \textbf{Tethered Flight:} 
 
-    We will combine the ESC and the DC brushless motor into our physical 3-D model and place in the motor to the designated locations and test the flight capability of our drone inside so that it is in a controlled environment. Emulating certain conditions that would flag an area to be unsafe and considered a fire danger zone such as dryness, humidity, and high temperatures. From there we will also test the speed of communication from taking the reading and sending it back to the user's system.
-    
-    \item \textbf{Open Field Flight:} 
+    We began by creating a prototype circuitry system that utilizes an H-Bridge in substitution for the Electronic Speed Controller, along with a DC brushed motor in place of the designed DC brushless motor. This system was used to test the wireless communication between the ground-side and drone-side microcontrollers, allowing us to develop and validate the data transmission pipeline while awaiting final parts.
 
-    Here we will test our drone within an open field and test the durability and structural integrity of our design. With outside testing it will allow us to see the closest natural environment that our drone will actually be deployed in, and using this data we can get immediate feedback on our structural design as well as the amount of time that it will fly with imperfect conditions such as wind, heat, etc. 
+    \item \textbf{Tethered Flight:}
+
+    We will integrate the ESC and DC brushless motors into the physical 3D-printed frame and test flight capability in a controlled indoor environment. During this phase we will emulate conditions that would flag a fire danger zone (elevated temperature, low humidity, and elevated smoke readings) and verify that threshold alerts are correctly triggered and transmitted to the ground station.
+
+    \item \textbf{Open Field Flight:}
+
+    We will test the drone in an open field to evaluate durability, structural integrity, and real-world sensor performance. Outdoor conditions including wind and heat will allow us to assess how environmental factors affect flight stability and sensor accuracy, providing direct feedback on both the mechanical design and the telemetry pipeline under realistic deployment conditions.
 \end{enumerate}
 
 \newpage
@@ -506,7 +567,7 @@ The test plan consists of three phases:
 
 \vspace{1em}
 
-\textbf{Parsa Rezvani:} This project has been a significant learning experience for both me and the team. Initially, we approached it as an exercise in selecting an interesting idea and producing documentation around it. Over time, however, we came to understand that the class demanded something closer to real world engineering practice; Defining a defensible need, building toward a clear goal, and maintaining a concept that could stand on its own merits in a professional context. Had we internalized that framing earlier, our process would have been more focused from the start. Despite the adjustments along the way, I am proud of how the team collaborated and adapted. With our components arriving soon, I am confident we are well positioned to make meaningful progress on the prototype.
+\textbf{Parsa Rezvani:} This project has been a significant learning experience for both me and the team. Initially, we approached it as an exercise in selecting an interesting idea and producing documentation around it. Over time, however, we came to understand that the class demanded something closer to real-world engineering practice: defining a defensible need, building toward a clear goal, and maintaining a concept that could stand on its own merits in a professional context. Had we internalized that framing earlier, our process would have been more focused from the start. Despite the adjustments along the way, I am proud of how the team collaborated and adapted. With our components arriving soon, I am confident we are well positioned to make meaningful progress on the prototype.
 
 \vspace{1em}
 
