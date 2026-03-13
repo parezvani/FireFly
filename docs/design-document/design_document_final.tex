@@ -6,7 +6,7 @@
 \usepackage{makecell}
 \usepackage{float}
 \usepackage{caption}
-\usepackage{wrapfig}
+\usepackage{wrapfig} 
 
 \titleformat{\section}
     {\normalfont\bfseries}
@@ -116,7 +116,7 @@ FireFly addresses this gap directly. By deploying a sensor-equipped quadcopter i
 Remote and high fire-risk areas lack the sensor infrastructure necessary to monitor environmental conditions during the critical pre-fire window, leaving fire response teams without the real-time data needed to act early.
 
 \subsection{Goal Statement}
-Provide fire response teams with real-time temperature, humidity, and smoke readings from high-risk, infrastructure-free terrain by deploying a rapidly mobilized monitoring system that transmits live data to a ground station and alerts operators when fire risk thresholds are crossed.
+Provide fire response teams with real-time temperature, humidity, and smoke readings from high risk, infrastructure free terrain by deploying a rapidly mobilized monitoring system that transmits real time data to a ground station and alerts operators when fire risk thresholds are crossed.
 
 \subsection{Personas}
 Individuals with experience levels ranging from novice to expert in fire monitoring and environmental fieldwork.
@@ -412,16 +412,14 @@ The following combinations were explored for the primary subsystems:
 \end{itemize}
 
 \newpage
-
 % ============================================================
 \section{Appendix 2 - Planning}
 % ============================================================
-
 \subsection{Basic Plan / Gantt Chart}
 [...]
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.5\linewidth]{images/Gantt_Chart_v2.png}
+    \includegraphics[width=1\linewidth]{images/Gantt_Chart_v2.png}
     \caption{Gantt Chart}
     \label{fig:gantt_chart}
 \end{figure}
@@ -453,7 +451,7 @@ The following combinations were explored for the primary subsystems:
 \end{table}
 
 \subsection{Collaboration}
-[...]
+[Collaboration ( did you use tools beyond your repository? how did you assign tasks? )]
 
 \newpage
 
@@ -461,11 +459,21 @@ The following combinations were explored for the primary subsystems:
 \section{Appendix 3 - Test Plan \& Results}
 % ============================================================
 
+%Appendix 3 - Test Plan & Results
+%You'll have summarised this in the body/evaluation section, but here's were you provide all the detail
+
 The test plan consists of three phases:
 \begin{enumerate}
-    \item \textbf{Bench Testing:} ...
-    \item \textbf{Tethered Flight:} ...
-    \item \textbf{Open Field Flight:} ...
+    \item \textbf{Bench Testing:}
+    
+    We began by creating a prototype circuitry system that utilizes an H-Bridge that is being used in substitution to the Electronic Speed Controller  along with a DC brushed motor compared to the designed DC brushless motor. This system was used to test the wireless communication between our grounded micro-controller to the micro-controller that will be in the air along with the drone. Thus will allow us to develop our system of communication, while waiting for parts that we ordered for our design, between the drone to receive the information required to test the environment.   
+    \item \textbf{Tethered Flight:} 
+
+    We will combine the ESC and the DC brushless motor into our physical 3-D model and place in the motor to the designated locations and test the flight capability of our drone inside so that it is in a controlled environment. Emulating certain conditions that would flag an area to be unsafe and considered a fire danger zone such as dryness, humidity, and high temperatures. From there we will also test the speed of communication from taking the reading and sending it back to the user's system.
+    
+    \item \textbf{Open Field Flight:} 
+
+    Here we will test our drone within an open field and test the durability and structural integrity of our design. With outside testing it will allow us to see the closest natural environment that our drone will actually be deployed in, and using this data we can get immediate feedback on our structural design as well as the amount of time that it will fly with imperfect conditions such as wind, heat, etc. 
 \end{enumerate}
 
 \newpage
