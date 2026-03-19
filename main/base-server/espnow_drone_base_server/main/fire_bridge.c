@@ -1,3 +1,6 @@
+// ESP-IDF bridge for ESP32-C3:
+// Receives ESP-NOW packets and pretty-prints them to USB serial (UART0).
+
 #include <stdio.h>
 #include <string.h>
 
@@ -15,60 +18,44 @@
 static const char *TAG = "ESP_NOW_BRIDGE";
 
 static void espnow_recv_cb(const esp_now_recv_info_t *recv_info,
-                           const uint8_t *data, int len)
+    const uint8_t *data, int len)
 {
-    ESP_LOGI(TAG, "ESP-NOW packet from %02X:%02X:%02X:%02X:%02X:%02X, len=%d",
-             recv_info->src_addr[0], recv_info->src_addr[1], recv_info->src_addr[2],
-             recv_info->src_addr[3], recv_info->src_addr[4], recv_info->src_addr[5],
-             len);
+char buf[300];
 
-    // Copy payload into a null-terminated buffer
-    char buf[300];
-    int copy_len = (len < (int)(sizeof(buf) - 1)) ? len : (int)(sizeof(buf) - 1);
-    memcpy(buf, data, copy_len);
-    buf[copy_len] = '\0';
+int copy_len = (len < (int)sizeof(buf) - 1) ? len : (int)sizeof(buf) - 1;
+memcpy(buf, data, copy_len);
+buf[copy_len] = '\0';
 
-    // Separator
-    const char *sep = "-----------------------------\n";
-    uart_write_bytes(UART_NUM_0, sep, strlen(sep));
+ESP_LOGI(TAG, "-----------------------------");
 
-    // Find the first '\n' between request line and telemetry line
-    char *req_line = buf;
-    char *telemetry_line = strchr(buf, '\n');
-    if (telemetry_line) {
-        *telemetry_line = '\0';  // terminate request line
-        telemetry_line++;        // move to start of telemetry text
-    }
+// Split into request line and telemetry line
+char *req_line = buf;
+char *telemetry_line = strchr(buf, '\n');
+if (telemetry_line) {
+*telemetry_line = '\0';
+telemetry_line++;
+}
 
-    // If no '\n' found, treat whole buffer as telemetry line
-    if (!telemetry_line || *telemetry_line == '\0') {
-        telemetry_line = req_line;
-        req_line = NULL;
-    }
+if (!telemetry_line || *telemetry_line == '\0') {
+telemetry_line = req_line;
+req_line = NULL;
+}
 
-    // Print request line (if we found one)
-    if (req_line) {
-        uart_write_bytes(UART_NUM_0, req_line, strlen(req_line));
-        uart_write_bytes(UART_NUM_0, "\n", 1);
-    }
+if (req_line) {
+ESP_LOGI(TAG, "%s", req_line);
+}
 
-    // Split telemetry_line by ';' into fields
-    char *field_save;
-    char *field = strtok_r(telemetry_line, ";", &field_save);
-    while (field) {
-        // Trim leading spaces
-        while (*field == ' ') {
-            field++;
-        }
-        if (*field != '\0') {
-            uart_write_bytes(UART_NUM_0, field, strlen(field));
-            uart_write_bytes(UART_NUM_0, "\n", 1);
-        }
-        field = strtok_r(NULL, ";", &field_save);
-    }
+char *saveptr = NULL;
+char *field = strtok_r(telemetry_line, ";", &saveptr);
+while (field) {
+while (*field == ' ') field++;
+if (*field != '\0') {
+ESP_LOGI(TAG, "%s", field);
+}
+field = strtok_r(NULL, ";", &saveptr);
+}
 
-    // Extra blank line after each packet
-    uart_write_bytes(UART_NUM_0, "\n", 1);
+ESP_LOGI(TAG, "");   // blank line after each packet
 }
 
 static void init_uart(void)
@@ -81,6 +68,7 @@ static void init_uart(void)
         .flow_ctrl = UART_HW_FLOWCTRL_DISABLE,
     };
     ESP_ERROR_CHECK(uart_param_config(UART_NUM_0, &uart_config));
+    // On ESP32-C3 devkits, UART0 is already mapped to USB serial, no pins to set
     ESP_ERROR_CHECK(uart_driver_install(UART_NUM_0, 1024, 0, 0, NULL, 0));
 }
 
@@ -122,6 +110,7 @@ void app_main(void)
 
     ESP_LOGI(TAG, "ESP-NOW bridge running...");
 
+    // Nothing else to do; ESP-NOW callbacks handle traffic
     while (true) {
         vTaskDelay(pdMS_TO_TICKS(1000));
     }
