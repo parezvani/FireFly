@@ -1,10 +1,26 @@
 #include "ESPNowEasy.h"
 #include "esp_adc/adc_oneshot.h"
 #include "hal/adc_types.h"
+#include "esp_now.h"
+#include <string.h>
 
 struct Message {
-    int pot_value; 
+    int pot_value;
 };
+
+struct SensorData {
+    float temp_c;
+    float humidity;
+};
+
+// Receive sensor telemetry sent back from the motor ESP
+static void on_sensor_data(const esp_now_recv_info_t *info, const uint8_t *data, int len) {
+    if (len == sizeof(SensorData)) {
+        SensorData s;
+        memcpy(&s, data, sizeof(s));
+        printf("Sensor <- %.2f C  %.2f%%RH\n", s.temp_c, s.humidity);
+    }
+}
 
 // Target MAC (The Drone's MAC)
 uint8_t drone_mac[] = {0x64, 0xE8, 0x33, 0xDC, 0xA2, 0xDC}; 
@@ -14,6 +30,7 @@ ESPNowEasy<Message> espNow;
 extern "C" void app_main(void) {
     // 1. Start ESP-NOW
     espNow.begin(drone_mac);
+    esp_now_register_recv_cb(on_sensor_data);
     
     // 2. Setup ADC (v5 style) - Fixed order and initializers
     adc_oneshot_unit_handle_t adc1_handle;

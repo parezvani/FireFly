@@ -11,11 +11,12 @@
 template<typename MessageType>
 class ESPNowEasy {
 public:
-    typedef void (*ReceiverCallback)(MessageType& message);
+    typedef void (*ReceiverCallback)(MessageType& message, const uint8_t* src_mac);
 
-    // Now accepts a peer MAC address
     bool begin(const uint8_t* peerAddr = nullptr);
     bool send(MessageType& message);
+    bool addPeer(const uint8_t* peerAddr);
+    template<typename T> bool sendAny(const uint8_t* addr, T& message);
     void onReceive(ReceiverCallback callback);
 
 private:

@@ -47,6 +47,22 @@ bool ESPNowEasy<MessageType>::send(MessageType& message) {
 }
 
 template<typename MessageType>
+bool ESPNowEasy<MessageType>::addPeer(const uint8_t* peerAddr) {
+    if (esp_now_is_peer_exist(peerAddr)) return true;
+    esp_now_peer_info_t peer = {};
+    memcpy(peer.peer_addr, peerAddr, 6);
+    peer.channel = 0;
+    peer.encrypt = false;
+    return esp_now_add_peer(&peer) == ESP_OK;
+}
+
+template<typename MessageType>
+template<typename T>
+bool ESPNowEasy<MessageType>::sendAny(const uint8_t* addr, T& message) {
+    return esp_now_send(addr, (uint8_t*)&message, sizeof(T)) == ESP_OK;
+}
+
+template<typename MessageType>
 void ESPNowEasy<MessageType>::onReceive(ReceiverCallback callback) {
     userCallback = callback;
     esp_now_register_recv_cb(receiveCallback);
@@ -54,10 +70,10 @@ void ESPNowEasy<MessageType>::onReceive(ReceiverCallback callback) {
 
 template<typename MessageType>
 void ESPNowEasy<MessageType>::receiveCallback(const esp_now_recv_info_t *info, const uint8_t *data, int len) {
-    if (len >= sizeof(MessageType) && userCallback != nullptr) {
+    if (len >= (int)sizeof(MessageType) && userCallback != nullptr) {
         MessageType msg;
         memcpy(&msg, data, sizeof(MessageType));
-        userCallback(msg);
+        userCallback(msg, info->src_addr);
     }
 }
 #endif
