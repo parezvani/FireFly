@@ -18,10 +18,12 @@ public:
     bool addPeer(const uint8_t* peerAddr);
     template<typename T> bool sendAny(const uint8_t* addr, T& message);
     void onReceive(ReceiverCallback callback);
+    int getLastRSSI() const { return lastRSSI; }
 
 private:
     uint8_t targetAddress[6];
     static ReceiverCallback userCallback;
+    static int lastRSSI;
     static void receiveCallback(const esp_now_recv_info_t *info, const uint8_t *data, int len);
 };
 

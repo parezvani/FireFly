@@ -10,6 +10,9 @@ template<typename MessageType>
 typename ESPNowEasy<MessageType>::ReceiverCallback ESPNowEasy<MessageType>::userCallback = nullptr;
 
 template<typename MessageType>
+int ESPNowEasy<MessageType>::lastRSSI = 0;
+
+template<typename MessageType>
 bool ESPNowEasy<MessageType>::begin(const uint8_t* peerAddr)
 {
     // Initialize NVS (Required for WiFi)
@@ -71,6 +74,7 @@ void ESPNowEasy<MessageType>::onReceive(ReceiverCallback callback) {
 template<typename MessageType>
 void ESPNowEasy<MessageType>::receiveCallback(const esp_now_recv_info_t *info, const uint8_t *data, int len) {
     if (len >= (int)sizeof(MessageType) && userCallback != nullptr) {
+        lastRSSI = info->rx_ctrl->rssi;
         MessageType msg;
         memcpy(&msg, data, sizeof(MessageType));
         userCallback(msg, info->src_addr);

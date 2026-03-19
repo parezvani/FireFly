@@ -114,7 +114,7 @@ void handleIncoming(Message& msg, const uint8_t* src_mac) {
 
     ledc_set_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0, duty);
     ledc_update_duty(LEDC_LOW_SPEED_MODE, LEDC_CHANNEL_0);
-    printf("Received Pot: %d | Duty: %d\n", msg.pot_value, duty);
+    printf("Received Pot: %d | Duty: %d | RSSI: %d dBm\n", msg.pot_value, duty, espNow.getLastRSSI());
 }
 
 extern "C" void app_main(void) {

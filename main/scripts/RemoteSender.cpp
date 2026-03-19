@@ -18,7 +18,7 @@ static void on_sensor_data(const esp_now_recv_info_t *info, const uint8_t *data,
     if (len == sizeof(SensorData)) {
         SensorData s;
         memcpy(&s, data, sizeof(s));
-        printf("Sensor <- %.2f C  %.2f%%RH\n", s.temp_c, s.humidity);
+        printf("Sensor <- %.2f C  %.2f%%RH | RSSI: %d dBm\n", s.temp_c, s.humidity, info->rx_ctrl->rssi);
     }
 }
 
@@ -51,7 +51,7 @@ extern "C" void app_main(void) {
         
         // Send to Drone
         espNow.send(data);
-        printf("TX -> Sending Pot: %d\n", data.pot_value);
+        //printf("TX -> Sending Pot: %d\n", data.pot_value);
         
         vTaskDelay(pdMS_TO_TICKS(50));
     }
