@@ -1,7 +1,7 @@
 /*
   ESP32-C3 drone frame (OpenSCAD model)
   - 3.5" to 4.0" prop-ready layout
-  - SunnySky R1106 motors
+  - RCINPOWER GTS 1204 5000KV motors
   - ESP32-C3-DevKit-RUST-1 controller
 */
 
@@ -28,15 +28,16 @@ arm_root_inset_x = 10;
 arm_root_inset_y = 7;
 
 // Motor pod geometry
-motor_can_d = 14.2; // SunnySky R1106 rotor/body diameter
-motor_can_l = 13.6; // SunnySky R1106 body length
-motor_pod_outer_d = 19;
-motor_pod_inner_d = 15.0; // +0.4 mm radial clearance per side for print tolerance
+motor_can_d = 16.1; // RCINPOWER GTS 1204 rotor/body diameter
+motor_can_l = 10.9; // RCINPOWER GTS 1204 body length above the mount face
+motor_pod_outer_d = 22.0;
+motor_pod_inner_d = 17.0; // +0.45 mm radial clearance per side for print tolerance
 motor_pod_height = 17;
 motor_mount_floor = 1.8;
-motor_mount_bcd = 9; // SunnySky schematic: 4xM2 on 9 mm bolt-circle diameter
-motor_mount_hole_center_r = motor_mount_bcd / 2;
+motor_mount_pattern_pitch = 9; // official motor drawing shows 4xM2 on a 9 mm square pattern
+motor_mount_half_pitch = motor_mount_pattern_pitch / 2;
 motor_mount_hole_d = 2.2; // M2 clearance
+motor_mount_center_relief_d = 5.2; // clears the center boss / wire exit feature on the motor base
 motor_wire_notch_w = 6.2; // side opening for 3 motor wires
 motor_wire_notch_h = 4.4;
 motor_wire_notch_depth = 4.7; // deep enough to break through pod wall
@@ -44,14 +45,14 @@ enable_arm_frame_wire_notches = true;
 arm_frame_wire_notch_w = 6.2;
 arm_frame_wire_notch_h = 6.4;
 arm_frame_wire_inboard_len = 8.0; // extend past arm root into frame pocket
-arm_frame_wire_into_pod = 2.8; // start trench inside pod OD so cutout passes through pod wall
+arm_frame_wire_into_pod = 3.2; // start trench inside pod OD so cutout passes through pod wall
 
 motor_pod_cavity_h = motor_pod_height - motor_mount_floor;
 motor_pod_radial_clearance = (motor_pod_inner_d - motor_can_d) / 2;
 motor_pod_axial_clearance = motor_pod_cavity_h - motor_can_l;
 
-assert(motor_pod_radial_clearance >= 0.3, "Motor pod inner diameter too tight for SunnySky R1106.");
-assert(motor_pod_axial_clearance >= 0.8, "Motor pod cavity height too short for SunnySky R1106.");
+assert(motor_pod_radial_clearance >= 0.3, "Motor pod inner diameter too tight for RCINPOWER GTS 1204.");
+assert(motor_pod_axial_clearance >= 0.8, "Motor pod cavity height too short for RCINPOWER GTS 1204.");
 
 // ESP32-C3-DevKit-RUST-1 geometry from KiCad (mm)
 // KiCad board X (22.86) is mapped to frame Y.
@@ -291,10 +292,13 @@ module frame_cutouts() {
             cylinder(h = motor_pod_height - motor_mount_floor + 0.2, d = motor_pod_inner_d);
         }
 
-        for (i = [0 : 3]) {
-            hole_angle = wire_angle + 45 + i * 90;
-            hole_x = motor_mount_hole_center_r * cos(hole_angle);
-            hole_y = motor_mount_hole_center_r * sin(hole_angle);
+        translate([mx, my, -0.1]) {
+            cylinder(h = motor_mount_floor + 0.4, d = motor_mount_center_relief_d);
+        }
+
+        for (hx = [-motor_mount_half_pitch, motor_mount_half_pitch], hy = [-motor_mount_half_pitch, motor_mount_half_pitch]) {
+            hole_x = hx * cos(wire_angle) - hy * sin(wire_angle);
+            hole_y = hx * sin(wire_angle) + hy * cos(wire_angle);
             translate([mx + hole_x, my + hole_y, -0.1]) {
                 cylinder(h = motor_mount_floor + 0.4, d = motor_mount_hole_d);
             }
